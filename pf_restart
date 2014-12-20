@@ -1,0 +1,6 @@
+#!/bin/bash -x
+
+# restart pf
+
+sudo launchctl unload -w /Library/LaunchDaemons/net.openbsd.pf.plist
+sudo launchctl load -w /Library/LaunchDaemons/net.openbsd.pf.plist
