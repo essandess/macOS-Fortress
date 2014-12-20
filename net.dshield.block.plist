@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>net.dshield.block.plist</string>
+	<key>Program</key>
+	<string>/bin/bash</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+ 		<string>-c</string>
+	<string>/bin/mkdir -p /usr/local/etc ; /opt/local/bin/wget -N -P /usr/local/etc http://feeds.dshield.org/block.txt &amp;&amp; /opt/local/bin/wget -N -P /usr/local/etc http://feeds.dshield.org/block.txt.asc &amp;&amp; /opt/local/bin/gpg --verify /usr/local/etc/block.txt.asc /usr/local/etc/block.txt &amp;&amp; /usr/bin/perl -ane &apos;use POSIX; use Data::Validate::IP; my $vip=Data::Validate::IP-&gt;new; if (/^\w*#/) { print; } elsif ($vip-&gt;is_ipv4($F[0]) &amp; $vip-&gt;is_ipv4($F[1]) &amp; isdigit($F[2]) &amp; (0&lt;= $F[2] &amp; $F[2]&lt;=32)) { print $F[0], &quot;/&quot;, $F[2], &quot;\n&quot;; }&apos; /usr/local/etc/block.txt &gt; /tmp/dshield_block_ip.txt &amp;&amp; /usr/bin/install -m 644 -g admin -S /tmp/dshield_block_ip.txt /usr/local/etc/dshield_block_ip.txt ; /bin/rm -f /tmp/dshield_block_ip.txt ; /sbin/pfctl -a blockips -T load -f /usr/local/etc/blockips.conf</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StartInterval</key>
+	<integer>11250</integer>
+	<key>ServiceDescription</key>
+	<string>dshield.org top 20 block list</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/pf.log</string>
+	<key>StandardOutPath</key>
+	<string>/var/log/pf.log</string>
+</dict>
+</plist>
