@@ -1,0 +1,37 @@
+#############################################################################
+# $Id: match-all.action,v 1.3 2010/03/27 18:48:38 fabiankeil Exp $
+#
+# This file contains the actions that are applied to all requests and
+# may be overruled later on by other actions files. Less experienced
+# users should only edit this file through the actions file editor.
+#
+#############################################################################
+# original:
+#{ \
+#+change-x-forwarded-for{block} \
+#+client-header-tagger{css-requests} \
+#+client-header-tagger{image-requests} \
+#+hide-from-header{block} \
+#+set-image-blocker{pattern} \
+#}
+#/ # Match all URLs
+{ \
++change-x-forwarded-for{block} \
++deanimate-gifs{last} \
++filter{refresh-tags} \
++filter{img-reorder} \
++filter{banners-by-size} \
++filter{webbugs} \
++filter{jumping-windows} \
++filter{ie-exploits} \
++hide-from-header{block} \
++hide-referrer{conditional-block} \
++session-cookies-only \
++set-image-blocker{pattern} \
+}
+/ # Match all URLs
+{ \
++hide-referrer{conditional-forge} \
++hide-user-agent{Mozilla/5.0 (iPad; CPU OS 6_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B141 Safari/8536.25} \
+}
+/ # Match all URLs
