@@ -1,0 +1,33 @@
+
+# blacklisted hosts of the form "127.0.0.1 hostname.tld" appened to /etc/hosts
+# 127.0.0.1	www.ahostnamethatyouwanttoblackholebutwillneveractuallyseeontheinternet.net
+# https://krebsonsecurity.com/2014/01/deconstructing-the-9-84-credit-card-hustle/
+127.0.0.1	callscs.in
+127.0.0.1	cewebcs.com
+127.0.0.1	cs-casa.com
+127.0.0.1	cewcs.com
+127.0.0.1	eduacc.in
+127.0.0.1	educs.in
+127.0.0.1	eetsac.com
+127.0.0.1	etosac.com
+127.0.0.1	feosac.com
+127.0.0.1	foculu.com
+127.0.0.1	homecs.in
+127.0.0.1	iawcs.com
+127.0.0.1	iewcs.com
+127.0.0.1	livecs.in
+127.0.0.1	netcs.in
+127.0.0.1	ntccs.in
+127.0.0.1	ntsupp.com
+127.0.0.1	onwsac.com
+127.0.0.1	premcs.in
+127.0.0.1	profcs.com
+127.0.0.1	quikcs.com
+127.0.0.1	sacluc.com
+127.0.0.1	sacsis.com
+127.0.0.1	sewcs.com
+127.0.0.1	suppcs.in
+127.0.0.1	tdwcs.com
+127.0.0.1	techcs.in
+127.0.0.1	vagacs.com
+127.0.0.1	webcs.in
