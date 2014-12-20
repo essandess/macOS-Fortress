@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>net.hphosts.hosts.plist</string>
+	<key>Program</key>
+	<string>/bin/bash</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+ 		<string>-c</string>
+	<string>/bin/mkdir -p /usr/local/etc ; ( /bin/test -f /etc/hosts.orig || /usr/bin/install -m 644 -S /etc/hosts /etc/hosts.orig ) &amp;&amp; /bin/cp /etc/hosts.orig /tmp/hosts &amp;&amp; /opt/local/bin/wget -N -P /usr/local/etc http://hosts-file.net/download/hosts.zip &amp;&amp; /opt/local/bin/wget -N -P /usr/local/etc http://hosts-file.net/hphosts-partial.asp &amp;&amp; /usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts &amp;&amp; /opt/local/bin/gpg --verify /tmp/hphosts/hosts.txt.sig /tmp/hphosts/hosts.txt &amp;&amp; ( /bin/test -f /usr/local/etc/whitelist.txt || /usr/bin/printf &apos;\n# whitelisted hosts (FQDN and DN) will be deleted from hphost&apos;&quot;&apos;&quot;&apos;s host.zip\n#\n&apos; &gt; /usr/local/etc/whitelist.txt )  &amp;&amp; /usr/bin/printf &apos;\n# hpHosts hosts.txt from http://hosts-file.net/download/hosts.zip:\n&apos; &gt; /tmp/hosts-block.txt &amp;&amp; /bin/cat /tmp/hphosts/hosts.txt | tr -d &apos;\015&apos; | /usr/bin/perl -ane &apos;use POSIX; use Data::Validate::Domain qw(is_domain); { if (/^127\.0\.0\.1\s*(.+)$/) { print qq#127.0.0.1\t$1\n# if is_domain($1); } else { print; } }&apos; &gt;&gt; /tmp/hosts-block.txt &amp;&amp; /usr/bin/printf &apos;\n# hpHosts hphosts-partial.asp from http://hosts-file.net/hphosts-partial.asp:\n&apos; &gt;&gt; /tmp/hosts-block.txt &amp;&amp; /bin/cat /usr/local/etc/hphosts-partial.asp | tr -d &apos;\015&apos; | /usr/bin/perl -ane &apos;use POSIX; use Data::Validate::Domain qw(is_domain); { if (/^127\.0\.0\.1\s*(.+)$/) { print qq#127.0.0.1\t$1\n# if is_domain($1); } else { print; } }&apos; &gt;&gt; /tmp/hosts-block.txt &amp;&amp; ( /bin/test -f /usr/local/etc/blacklist.txt &amp;&amp; /bin/cat /usr/local/etc/blacklist.txt &gt;&gt; /tmp/hosts ) &amp;&amp; /usr/bin/grep -v -E &quot;`/usr/bin/perl -ane &apos;BEGIN{$s=qw#\\s+(#}; { if (!/^\w*#/&amp;length($F[0])&gt;0){$s = $s . $F[0] . qw(|);}} END{$s = substr($s,0,length($s)-1) . qw#)\\s*#; $s=~s/\\./\\\\./g; print $s;}&apos; /usr/local/etc/whitelist.txt`&quot; /tmp/hosts-block.txt &gt;&gt; /tmp/hosts &amp;&amp; /usr/bin/install -m 644 -S /tmp/hosts /etc/hosts-hphosts ; /bin/rm -fr /tmp/hosts /tmp/hphosts /tmp/hosts-block.txt ; /opt/local/sbin/squid -k reconfigure</string>
+	</array>
+        <key>RunAtLoad</key>
+        <true/>
+        <key>StartInterval</key>
+	<integer>86850</integer>
+	<key>ServiceDescription</key>
+	<string>hpHosts.org hosts file update</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/system.log</string>
+	<key>StandardOutPath</key>
+	<string>/var/log/system.log</string>
+</dict>
+</plist>
