@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# osxfortress_boot_check -- check to make sure that all desired services are running
+
+# commands
+SUDO=/usr/bin/sudo
+LAUNCHCTL=/bin/launchctl
+PFCTL=/sbin/pfctl
+HEAD=/usr/bin/head
+TAIL=/usr/bin/tail
+LSOF=/usr/sbin/lsof
+KILLALL=/usr/bin/killall
+
+# pfctl
+if ! [[ `$SUDO $PFCTL -s info | $HEAD -1 | $TAIL -1` =~ "Status: Enabled" ]]; then
+    $SUDO $LAUNCHCTL unload -w /Library/LaunchDaemons/net.openbsd.pf.plist
+    $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
+fi
+
+# privoxy
+if ! [[ `$SUDO $LSOF -i ':8118' | $TAIL -1` ]]; then
+    $SUDO $LAUNCHCTL unload -w /Library/LaunchDaemons/org.macports.Privoxy.plist
+    $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.Privoxy.plist
+fi
+
+# squid
+if ! [[ `$SUDO $LSOF -i ':3128' | $TAIL -1` ]]; then
+    $SUDO $LAUNCHCTL unload -w /Library/LaunchDaemons/org.macports.Squid.plist
+    $SUDO $KILLALL '(squid)'
+    $SUDO $KILLALL squid
+    $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.Squid.plist
+fi
