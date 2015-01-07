@@ -24,7 +24,7 @@ LSOF=/usr/sbin/lsof
 CP=/bin/cp
 RM=/bin/rm
 
-$CAT <<HELPSTRING | $MORE
+$CAT <<'HELPSTRING' | $MORE
 OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
 for Trackers, Attackers, Malware, Adware, and Spammers
 
