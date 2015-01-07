@@ -7,7 +7,7 @@
 SUDO=/usr/bin/sudo
 INSTALL=/usr/bin/install
 PORT=/opt/local/bin/port
-CPAN=/opt/local/bin/cpan
+CPAN=/usr/bin/cpan
 GPG=/opt/local/bin/gpg
 OPEN=/usr/bin/open
 DIFF=/usr/bin/diff
