@@ -227,6 +227,7 @@ $SUDO $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.securemecca.pac.plist /Library/LaunchDaemons
 $INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
 $SUDO $MKDIR -p /usr/local/etc
+$SUDO $INSTALL -m 644 ./blockips.conf /usr/local/etc
 $SUDO $INSTALL -m 644 ./whitelist.txt /usr/local/etc
 $SUDO $INSTALL -m 644 ./blacklist.txt /usr/local/etc
 
