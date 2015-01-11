@@ -159,7 +159,7 @@ $CAT <<'GPGID'
 Keep your gpg keychain up to date by checking the keys IDs with these commands:
 
 /opt/local/bin/gpg --verify /usr/local/etc/block.txt.asc /usr/local/etc/block.txt
-/usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts && /opt/local/bin/gpg --verify /tmp/hphosts/hosts.txt.sig /tmp/hphosts/hosts.txt
+/usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts && /opt/local/bin/gpg --verify /tmp/hphosts/hosts.txt.asc /tmp/hphosts/hosts.txt
 /opt/local/bin/7za x -aoa -o/tmp /usr/local/etc/AutoPac_EN.unx.7z AutoPac_EN.unx && /opt/local/bin/gpg --verify /tmp/AutoPac_EN.unx/proxy_en.sig /tmp/AutoPac_EN.unx/proxy_en
 GPGID
 
