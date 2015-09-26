@@ -196,6 +196,10 @@ news.google.com/news/url.*&url=http.*&
 {+block{Facebook "like" and similar tracking URLs.}}
 www.facebook.com/(extern|plugins)/(login_status|like(box)?|activity|fan)\.php
 
+# http://serverfault.com/questions/182293/privoxy-rule-to-block-facebook-spying
+{ +block-as-image{People-tracking button.} }
+.facebook.com/(plugins|widgets)/(like|fan|activity).*
+
 # fix sites that privoxy breaks
 { fragile }
 ads1.msn.com/
