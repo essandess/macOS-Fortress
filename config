@@ -362,6 +362,7 @@ logdir /opt/local/var/log/privoxy
 actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.
 actionsfile default.action   # Main actions file
 actionsfile user.action      # User customizations
+actionsfile easylist.script.action      # Adblock's converted customizations
 #
 #  2.5. filterfile
 #  ================
@@ -407,6 +408,7 @@ actionsfile user.action      # User customizations
 #
 filterfile default.filter
 filterfile user.filter      # User customizations
+filterfile easylist.script.filter      # Adblock's converted customizations
 #
 #  2.6. logfile
 #  =============
