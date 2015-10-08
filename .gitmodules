@@ -1,0 +1,3 @@
+[submodule "privoxy-adblock"]
+	path = privoxy-adblock
+	url = git://github.com/essandess/privoxy-adblock
