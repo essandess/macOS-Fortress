@@ -232,6 +232,7 @@ $SUDO $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemon
 $SUDO $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.securemecca.pac.plist /Library/LaunchDaemons
+$SUDO $INSTALL -m 644 ./org.adblockplus.privoxy-adblock.plist /Library/LaunchDaemons
 $INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
 $SUDO $MKDIR -p /usr/local/etc
 $SUDO $INSTALL -m 644 ./blockips.conf /usr/local/etc
@@ -243,6 +244,7 @@ $SUDO $INSTALL -m 755 ./osxfortress_boot_check /usr/local/bin
 $SUDO $INSTALL -m 755 ./pf_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./privoxy_restart /usr/local/bin
+$SUDO $INSTALL -m 755 ./privoxy-adblock/privoxy-adblock.sh /usr/local/bin
 
 
 # daemons
@@ -252,7 +254,8 @@ $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.emergingthreats.blockips.pli
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.dshield.block.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.securemecca.pac.plist
- 
+$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.adblockplus.privoxy-adblock.plist
+
 $LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
 
 $SUDO $PORT load squid
