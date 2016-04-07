@@ -148,7 +148,8 @@ fi
 $SUDO $PORT selfupdate
 
 # Install wget, gnupg, 7z, proxies, perl modules
-$SUDO $PORT install wget gnupg p7zip squid privoxy nmap
+$SUDO $PORT uninstall squid && $SUDO $PORT clean --dist squid
+$SUDO $PORT install wget gnupg p7zip squid3 privoxy nmap
 $SUDO $CPAN install
 $SUDO $CPAN -i Data::Validate::IP
 $SUDO $CPAN -i Data::Validate::Domain
