@@ -51,7 +51,7 @@ Proxy. It will:
 
 > **Application** :arrow_right:port 3128:arrow_right: **Squid** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
 
-Installation:
+## Installation
 
 ```
 sudo sh ./readme-and-install.sh
