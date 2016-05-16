@@ -47,9 +47,9 @@ Proxy. It will:
 * Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../osx-openvpn-server)
 * Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and securemecca.com (net.securemecca.pac.plist)
 * Installs a user launch daemon that deletes flash cookies not related to Adobe Flash Player settings every half-hour  (http://goo.gl/k4BxuH)
-* After installation the connection between clients and the  internet looks this this:
+* After installation the connection between clients and the internet looks this this:
 
-	  Application  <--port 3128-->  Squid  <--port 8118--> Privoxy  <----> Internet
+> **Application** :arrow_right:port 3128:arrow_right: **Squid** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
 
 Installation:
 
