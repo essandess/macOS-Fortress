@@ -1,18 +1,23 @@
 osxfortress
 ===========
 
-OS X Fortress: Firewall, Blackhole, and Privatizing Proxy for Trackers, Attackers, Malware, Adware, and Spammers
+# OS X Fortress: Firewall, Blackhole, and Privatizing Proxy for Trackers, Attackers, Malware, Adware, and Spammers
 
-Kernel-level, OS-level, and client-level security for OS X. Built to
-address a steady stream of attacks visible on snort and server logs,
-as well as blocks ads, malicious scripts, and conceal information used
-to track you around the web. After this package was installed, snort
-and other detections have fallen to a fraction with a few simple
-blocking actions.  This setup is a lot more capable and effective than
-using a simple adblocking browser Add-On. There's a world of
-difference between ad-filled web pages with and without a filtering
-proxy server. It's also saved me from inadvertantly clicking on
-phishing links.
+Kernel-level, OS-level, and client-level security for OS X. Built to address a steady stream of attacks visible on snort and server logs, as well as blocks ads, malicious scripts, and conceal information used to track you around the web. After this package was installed, snort and other detections have fallen to a fraction with a few simple blocking actions.  This setup is a lot more capable and effective than using a simple adblocking browser add-on. There's a world of difference between ad-filled web pages with and without a filtering proxy server. It's also saved me from inadvertantly clicking on phishing links.
+
+## Tracker blocking
+
+[Lightbeam](https://www.mozilla.org/en-US/lightbeam/), the tracking tracker Firefox add-on, shows how ad- and tracker-blocking works to prevent third parties monitoring you or your children's online activities. My daughter enjoys the learning exercises at the children's website [ABCya!](http://www.abcya.com). The Lightbeam graph below on the left shows all the third party trackers after less than a minute of browser activity, without using a privatizing proxy. The graph on the right shows all this tracker activity blocked when this privatizing proxy is used.
+
+
+![Lightbeam graph without proxy](Lightbeam_noproxy.png)| ![Lightbeam graph without proxy](Lightbeam_proxy.png)
+------------ | -------------
+Lightbeam graph without proxy | Lightbeam graph with proxy
+
+
+## Attack blocking
+
+
 
 This package uses these features:
 
