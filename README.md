@@ -14,6 +14,10 @@ Kernel-level, OS-level, and client-level security for OS X. Built to address a s
 ------------ | -------------
 Lightbeam graph without proxy | Lightbeam graph with proxy
 
+This problem is the subject of Gary Kovacs's TED talk, '''Tracking our online trackers:'''
+
+[![Tracking our online trackers](https://www.youtube.com/watch?v=f_f5wNw-2c0/0.jpg)](https://www.youtube.com/watch?v=f_f5wNw-2c0 "Tracking our online trackers")
+
 
 ## Attack blocking
 
