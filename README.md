@@ -14,14 +14,21 @@ Kernel-level, OS-level, and client-level security for OS X. Built to address a s
 ------------ | -------------
 Lightbeam graph without proxy | Lightbeam graph with proxy
 
-This problem is the subject of Gary Kovacs's TED talk, '''Tracking our online trackers:'''
+This problem is the subject of Gary Kovacs's TED talk, *Tracking our online trackers:*
 
 [![Tracking our online trackers](https://www.wired.com/images_blogs/business/2012/02/6792752454_99d91d2a92_z.jpg)](https://www.youtube.com/watch?v=f_f5wNw-2c0 "Tracking our online trackers")
 
 
 ## Attack blocking
 
+The snort intrusion detection system reports far fewer events when known attack sites are blackholed by the packet filter:
 
+![snort+BASE Overview](BASE_Overview.PNG)| ![snort+BASE Events](BASE_Events.PNG)
+------------ | -------------
+snort+BASE Overview | snort+BASE Events
+
+
+## Proxy features
 
 This package uses these features:
 
