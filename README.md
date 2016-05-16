@@ -69,4 +69,4 @@ sudo sh ./readme-and-install.sh
 ## Security
 
 * These services are intended to be run on a secure LAN behind a router firewall.
-* Even though the default proxy configuration will only accept connections made from the local computer (localhost), do not configure the router to forward ports 3128 or 8118 in case you ever change this or you will be running an open web proxy.
+* The default proxy configuration will only accept connections made from the local computer (localhost). If you change this to accept connections from any client on your LAN, do not configure the router to forward ports 3128 or 8118, or you will be running an open web proxy.
