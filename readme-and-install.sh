@@ -9,6 +9,7 @@ INSTALL=/usr/bin/install
 PORT=/opt/local/bin/port
 CPAN=/usr/bin/cpan
 GPG=/opt/local/bin/gpg
+CURL=/usr/bin/curl
 OPEN=/usr/bin/open
 DIFF=/usr/bin/diff
 PATCH=/usr/bin/patch
@@ -23,6 +24,7 @@ MORE=/usr/bin/more
 LSOF=/usr/sbin/lsof
 CP=/bin/cp
 RM=/bin/rm
+FMT=/usr/bin/fmt
 
 $CAT <<'HELPSTRING' | $MORE
 OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
@@ -154,8 +156,10 @@ $SUDO $CPAN install
 $SUDO $CPAN -i Data::Validate::IP
 $SUDO $CPAN -i Data::Validate::Domain
 # Used to verify downloads
-$SUDO $GPG --recv-keys C1E94509 608D9001 C83946F0
-$SUDO $GPG --list-keys
+$SUDO $CURL -O https://secure.dshield.org/PGPKEYS.txt
+$SUDO $GPG --homedir /var/root/.gnupg --import PGPKEYS.txt
+$SUDO $GPG --homedir /var/root/.gnupg --recv-keys C1E94509 608D9001 C83946F0
+$SUDO $GPG --homedir /var/root/.gnupg --list-keys
 $CAT <<'GPGID'
 Keep your gpg keychain up to date by checking the keys IDs with these commands:
 
@@ -163,6 +167,9 @@ Keep your gpg keychain up to date by checking the keys IDs with these commands:
 /usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts && /opt/local/bin/gpg --verify /tmp/hphosts/hosts.txt.asc /tmp/hphosts/hosts.txt
 /opt/local/bin/7za x -aoa -o/tmp /usr/local/etc/AutoPac_EN.unx.7z AutoPac_EN.unx && /opt/local/bin/gpg --verify /tmp/AutoPac_EN.unx/proxy_en.sig /tmp/AutoPac_EN.unx/proxy_en
 GPGID
+$ECHO 'To delete expited keys, see http://superuser.com/questions/594116/clean-up-my-gnupg-keyring/594220#comment730593_594220'
+$SUDO $GPG --homedir /var/root/.gnupg --list-keys | $AWK '/^pub.* \[expired\: / {id=$2; sub(/^.*\//, "", id); print id}' | $FMT -w 999 | $SED 's/^/gpg --delete-keys /;'
+$SUDO $GPG --homedir /var/root/.gnupg --delete-keys KeyIDs ...
 
 # apache for proxy.pac
 if ! [ -d /Applications/Server.app ]
