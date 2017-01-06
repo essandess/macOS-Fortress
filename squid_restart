@@ -3,6 +3,6 @@
 # restart Squid
 
 sudo launchctl unload -w /Library/LaunchDaemons/org.macports.Squid.plist
-sudo killall '(squid)'
+sudo killall '(squid-1)'
 sudo killall squid
 sudo launchctl load -w /Library/LaunchDaemons/org.macports.Squid.plist
