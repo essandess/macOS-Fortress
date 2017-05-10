@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>org.squid-cache.squid-rotate.plist</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+ 		<string>-c</string>
+		<string>/opt/local/sbin/squid -k rotate ; find /opt/local/var/squid/logs -mindepth 1 -mtime +30 -exec /bin/rm {} &apos;;&apos;</string>
+	</array>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>0</integer>
+	</dict>
+	<key>ServiceDescription</key>
+	<string>Rotate Squid Logs Every Day at Midnight</string>
+</dict>
+</plist>
