@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# MacPorts generated daemondo support script
+#
+
+#
+# Init
+#
+prefix=/opt/local
+
+#
+# Start
+#
+Start()
+{
+   cd /opt/local/var/squid
+   if [ ! -d "/opt/local/var/squid/cache/00" ]; then
+       /opt/local/sbin/squid -s -z
+   fi
+   /opt/local/sbin/squid -s -N
+}
+
+#
+# Stop
+#
+Stop()
+{
+   cd /opt/local/var/squid
+   /opt/local/sbin/squid -k shutdown
+   while /opt/local/sbin/squid -k check; do
+       sleep 1
+   done
+}
+
+#
+# Restart
+#
+Restart()
+{
+   Stop
+   Start
+}
+
+#
+# Run
+#
+Run()
+{
+case $1 in
+ start  ) Start   ;;
+ stop   ) Stop    ;;
+ restart) Restart ;;
+ *      ) echo "$0: unknown argument: $1";;
+esac
+}
+
+#
+# Run a phase based on the selector
+#
+Run $1
