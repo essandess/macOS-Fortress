@@ -210,6 +210,16 @@ $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/squid/squid.conf ./squid.conf > /tmp/s
 $SUDO $PATCH -p5 /opt/local/etc/squid/squid.conf < /tmp/squid.conf.patch
 $RM /tmp/squid.conf.patch
 
+# squid -N no daemon mode to avoid launchd issue and multiple squid jobs
+$SUDO $INSTALL -m 644 -B .orig ./Squid.wrapper /opt/local/etc/LaunchDaemons/org.macports.Squid
+
+# rotate squid logs
+$SUDO $INSTALL -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
+if ![ -d /opt/local/var/squid/logs ]; then
+    $SUDO $MKDIR -p -m 644 /opt/local/var/squid/logs
+    $SUDO $CHOWN -R squid:squid /opt/local/var/squid
+fi
+
 # privoxy
 
 #config
@@ -230,6 +240,11 @@ $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/user.action ./user.action > /t
 $SUDO $PATCH -p5 /opt/local/etc/privoxy/user.action < /tmp/user.action.patch
 $RM /tmp/user.action.patch
 
+#privoxy logs
+if ![ -d /opt/local/var/log/privoxy ]; then
+    $SUDO $MKDIR -m 644 /opt/local/var/log/privoxy
+    $SUDO $CHOWN privoxy:privoxy /opt/local/var/log/privoxy
+fi
 
 # install the files
 $SUDO $CP /etc/hosts /etc/hosts.orig
@@ -263,6 +278,7 @@ $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.dshield.block.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.securemecca.pac.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.adblockplus.privoxy-adblock.plist
+$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist
 
 $LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
 
