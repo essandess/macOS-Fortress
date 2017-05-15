@@ -62,6 +62,12 @@ Proxy. It will:
 sudo sh ./readme-and-install.sh
 ```
 
+## Disabling
+
+```
+sudo sh ./disable.sh
+```
+
 ## Notes
 
 * Configure the squid proxy to accept connections on the LAN IP and set LAN device Automatic Proxy Configurations to http://lan_ip/proxy.pac to protect devices on the LAN.
