@@ -3,33 +3,27 @@
 # OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
 
-# uninstall.sh
-
+# disable.sh
 
 # commands
 SUDO=/usr/bin/sudo
 PORT=/opt/local/bin/port
 LAUNCHCTL=/bin/launchctl
 PFCTL=/sbin/pfctl
+KILLALL=/usr/bin/killall
 CAT=/bin/cat
 ECHO=/bin/echo
 
-$CAT <<EOF
-'HELPSTRING' | $MORE
+$CAT <<HELPSTRING
 OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
 for Trackers, Attackers, Malware, Adware, and Spammers
 Kernel-level, OS-level, and client-level security for OS X. 
 
-This uninstall script will unload all launch daemons, disable
+This disable script will unload all launch daemons, disable
 the pf firewall, and list all insalled files WITHOUT removing them.
 
-
-Uninstalling…
-
+Disabling…
 HELPSTRING
-
-$ECHO "Uninstalling…"
-
 
 $ECHO "Unloading launchctl daemons…"
 
@@ -59,14 +53,15 @@ $SUDO $PFCTL -d
 $ECHO "Killing the squid and privoxy proxies…"
 
 $SUDO $PORT unload squid
-$SUDO $KILLALL -9 '(squid-1)'
 $SUDO $KILLALL -9 squid
+$SUDO $KILLALL -9 '(squid-1)'
 $SUDO $PORT unload privoxy
 
 
-$ECHO "These files still exist…"
+$ECHO ""
+$ECHO "These files still exist:"
 
-fname_exists () { if [ -f $FNAME ]; then $ECHO "File $FNAME exists."; fi; }
+fname_exists () { if [ -f $FNAME ]; then $ECHO "$FNAME"; fi; }
 
 PROXY_PAC_DIRECTORY=/Library/WebServer/Documents
 
@@ -81,7 +76,7 @@ for FNAME in \
 	$LAUNCHDAEMONS/net.hphosts.hosts.plist \
 	$LAUNCHDAEMONS/net.securemecca.pac.plist \
 	$LAUNCHDAEMONS/org.adblockplus.privoxy-adblock.plist \
-	~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist \
+	$HOME/Library/LaunchAgents/org.opensource.flashcookiedelete.plist \
 	/usr/local/etc/blockips.conf \
 	/usr/local/etc/whitelist.txt \
 	/usr/local/etc/blacklist.txt \
@@ -96,4 +91,3 @@ for FNAME in \
 done
 
 exit 0
-EOF
