@@ -38,7 +38,8 @@ for FNAME in \
 	net.dshield.block.plist \
 	net.hphosts.hosts.plist \
 	net.securemecca.pac.plist \
-	org.adblockplus.privoxy-adblock.plist \
+	com.github.essandess.adblock2privoxy.plist \
+	com.github.essandess.adblock2privoxy.nginx.plist \
 	org.squid-cache.squid-rotate.plist \
 	; do
 	launchctl_unload
@@ -75,7 +76,9 @@ for FNAME in \
 	$LAUNCHDAEMONS/net.dshield.block.plist \
 	$LAUNCHDAEMONS/net.hphosts.hosts.plist \
 	$LAUNCHDAEMONS/net.securemecca.pac.plist \
-	$LAUNCHDAEMONS/org.adblockplus.privoxy-adblock.plist \
+	$LAUNCHDAEMONS/com.github.essandess.adblock2privoxy.plist \
+	$LAUNCHDAEMONS/com.github.essandess.adblock2privoxy.nginx.plist \
+	$LAUNCHDAEMONS/org.squid-cache.squid-rotate.plist \
 	$HOME/Library/LaunchAgents/org.opensource.flashcookiedelete.plist \
 	/usr/local/etc/blockips.conf \
 	/usr/local/etc/whitelist.txt \
@@ -84,7 +87,6 @@ for FNAME in \
 	/usr/local/bin/pf_restart \
 	/usr/local/bin/squid_restart \
 	/usr/local/bin/privoxy_restart \
-	/usr/local/bin/privoxy-adblock.sh \
 	/opt/local/etc/LaunchDaemons/org.macports.Squid/Squid.wrapper.orig \
 	; do
 	fname_exists

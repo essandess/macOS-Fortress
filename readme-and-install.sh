@@ -24,7 +24,10 @@ MORE=/usr/bin/more
 LSOF=/usr/sbin/lsof
 CP=/bin/cp
 RM=/bin/rm
+SH=/bin/sh
 FMT=/usr/bin/fmt
+STACK=/usr/local/bin/stack
+ADBLOCK2PRIVOXY=/usr/local/bin/adblock2privoxy
 
 $CAT <<'HELPSTRING' | $MORE
 OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
@@ -146,12 +149,20 @@ then run this script again.
 MACPORTS
     exit 1
 fi
+
+# Install stack for adblock2privoxy
+# https://docs.haskellstack.org/en/stable/install_and_upgrade/
+if ! [ -x $STACK ]
+then
+    $CURL -sSL https://get.haskellstack.org/ | $SH
+fi
+
 # Proxy settings in /opt/local/etc/macports/macports.conf
 $SUDO $PORT selfupdate
 
 # Install wget, gnupg, 7z, proxies, perl modules
 $SUDO $PORT uninstall squid && $SUDO $PORT clean --dist squid
-$SUDO $PORT install wget gnupg p7zip squid3 privoxy nmap
+$SUDO $PORT install wget gnupg p7zip squid3 privoxy nginx nmap
 $SUDO $CPAN install
 $SUDO $CPAN -i Data::Validate::IP
 $SUDO $CPAN -i Data::Validate::Domain
@@ -198,6 +209,17 @@ fi
 $SUDO $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY
 $SUDO $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac.orig
 
+# Compile and install adblock2privoxy
+if ! [ -x $ADBLOCK2PRIVOXY ]
+then
+    $CD ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy
+    # ensure that macOS /usr/bin/gcc is the C compiler
+    $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy
+    PATH=/usr/bin:$PATH STACK_ROOT=/usr/local/etc/.stack $STACK setup
+    PATH=/usr/bin:$PATH STACK_ROOT=/usr/local/etc/.stack $STACK install --local-bin-path /usr/local/bin
+    $SUDO $INSTALL -m 644 ./nginx.conf /usr/local/etc/adblock2privoxy
+    $CD ../../..
+fi
 
 # proxy configuration
 
@@ -255,7 +277,8 @@ $SUDO $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemon
 $SUDO $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.securemecca.pac.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./org.adblockplus.privoxy-adblock.plist /Library/LaunchDaemons
+$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
+$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
 $INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
 $SUDO $MKDIR -p /usr/local/etc
 $SUDO $INSTALL -m 644 ./blockips.conf /usr/local/etc
@@ -267,8 +290,6 @@ $SUDO $INSTALL -m 755 ./osxfortress_boot_check /usr/local/bin
 $SUDO $INSTALL -m 755 ./pf_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./privoxy_restart /usr/local/bin
-$SUDO $INSTALL -m 755 ./privoxy-adblock/privoxy-adblock.sh /usr/local/bin
-
 
 # daemons
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
@@ -277,7 +298,8 @@ $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.emergingthreats.blockips.pli
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.dshield.block.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.securemecca.pac.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.adblockplus.privoxy-adblock.plist
+$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist
+$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist
 
 $LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist

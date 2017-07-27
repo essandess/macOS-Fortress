@@ -1,3 +1,7 @@
 [submodule "privoxy-adblock"]
-	path = privoxy-adblock
+	path = deprecated/privoxy-adblock
 	url = https://github.com/essandess/privoxy-adblock
+[submodule "easylist-pac-privoxy"]
+	path = easylist-pac-privoxy
+	url = git@github.com:essandess/easylist-pac-privoxy.git
+	branch = master
