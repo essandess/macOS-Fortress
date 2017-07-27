@@ -59,6 +59,8 @@ Proxy. It will:
 ## Installation
 
 ```
+git clone --recurse https://github.com/essandess/osxfortress.git
+cd osxfortress
 sudo sh ./readme-and-install.sh
 ```
 
