@@ -74,8 +74,8 @@ Proxy. It will:
 	  update open source IP and host blacklists. The sources are
 	  emergingthreats.net (net.emergingthreats.blockips.plist),
 	  dshield.org (net.dshield.block.plist), hosts-file.net
-	  (net.hphosts.hosts.plist), and securemecca.com
-	  (net.securemecca.pac.plist)
+	  (net.hphosts.hosts.plist), and EasyList
+	  (com.github.essandess.easylist-pac.plist)
 	* Installs a user launch daemon that deletes flash cookies not
           related to Adobe Flash Player settings every half-hour
           <http://goo.gl/k4BxuH>
@@ -160,9 +160,10 @@ fi
 # Proxy settings in /opt/local/etc/macports/macports.conf
 $SUDO $PORT selfupdate
 
-# Install wget, gnupg, 7z, proxies, perl modules
+# Install wget, gnupg, 7z, proxies, perl, and python modules
 $SUDO $PORT uninstall squid && $SUDO $PORT clean --dist squid
-$SUDO $PORT install wget gnupg p7zip squid3 privoxy nginx nmap
+$SUDO $PORT install wget gnupg p7zip squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
+$SUDO $PORT select --set python3 python36
 $SUDO $CPAN install
 $SUDO $CPAN -i Data::Validate::IP
 $SUDO $CPAN -i Data::Validate::Domain
@@ -276,7 +277,7 @@ $SUDO $INSTALL -m 644 ./net.openbsd.pf.brutexpire.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./net.securemecca.pac.plist /Library/LaunchDaemons
+$SUDO $INSTALL -m 644 ./com.github.essandess.easylist-pac.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
 $INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
@@ -290,6 +291,7 @@ $SUDO $INSTALL -m 755 ./osxfortress_boot_check /usr/local/bin
 $SUDO $INSTALL -m 755 ./pf_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./privoxy_restart /usr/local/bin
+$SUDO $INSTALL -m 755 ./easylist-pac-privoxy/easylist_pac.py /usr/local/bin
 
 # daemons
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
@@ -297,7 +299,7 @@ $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.emergingthreats.blockips.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.dshield.block.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.securemecca.pac.plist
+$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.easylist-pac.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist

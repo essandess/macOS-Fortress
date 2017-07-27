@@ -37,7 +37,7 @@ for FNAME in \
 	net.emergingthreats.blockips.plist \
 	net.dshield.block.plist \
 	net.hphosts.hosts.plist \
-	net.securemecca.pac.plist \
+	com.github.essandess.easylist-pac.plist \
 	com.github.essandess.adblock2privoxy.plist \
 	com.github.essandess.adblock2privoxy.nginx.plist \
 	org.squid-cache.squid-rotate.plist \
@@ -75,7 +75,7 @@ for FNAME in \
 	$LAUNCHDAEMONS/net.emergingthreats.blockips.plist \
 	$LAUNCHDAEMONS/net.dshield.block.plist \
 	$LAUNCHDAEMONS/net.hphosts.hosts.plist \
-	$LAUNCHDAEMONS/net.securemecca.pac.plist \
+	$LAUNCHDAEMONS/com.github.essandess.easylist-pac.plist \
 	$LAUNCHDAEMONS/com.github.essandess.adblock2privoxy.plist \
 	$LAUNCHDAEMONS/com.github.essandess.adblock2privoxy.nginx.plist \
 	$LAUNCHDAEMONS/org.squid-cache.squid-rotate.plist \
@@ -87,6 +87,8 @@ for FNAME in \
 	/usr/local/bin/pf_restart \
 	/usr/local/bin/squid_restart \
 	/usr/local/bin/privoxy_restart \
+	/usr/local/bin/easylist_pac.py \
+	/usr/local/bin/adblock2privoxy \
 	/opt/local/etc/LaunchDaemons/org.macports.Squid/Squid.wrapper.orig \
 	; do
 	fname_exists
