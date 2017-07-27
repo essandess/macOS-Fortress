@@ -50,7 +50,7 @@ Proxy. It will:
 * Turn on OS X's native Apache webserver to serve the Automatic proxy configuration http://localhost/proxy.pac
 * Networking on the local computer can be set up to use this Automatic Proxy Configuration without breaking App Store or other updates (see squid.conf)
 * Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../../../osx-openvpn-server)
-* Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and securemecca.com (net.securemecca.pac.plist)
+* Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and [EasyList](https://easylist.to) (com.github.essandess.easylist-pac.plist, com.github.essandess.adblock2privoxy.plist)
 * Installs a user launch daemon that deletes flash cookies not related to Adobe Flash Player settings every half-hour  (http://goo.gl/k4BxuH)
 * After installation the connection between clients and the internet looks this this:
 
