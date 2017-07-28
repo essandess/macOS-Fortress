@@ -6,8 +6,6 @@ osxfortress
 Kernel-level, OS-level, and client-level security for OS X. Built to address a steady stream of attacks visible on snort and server logs, as well as blocks ads, malicious scripts, and conceal information used to track you around the web. After this package was installed, snort and other detections have fallen to a fraction with a few simple blocking actions.  This setup is a lot more capable and effective than using a simple adblocking browser add-on. There's a world of difference between ad-filled web pages with and without a filtering proxy server. It's also saved me from inadvertantly clicking on phishing links.
 
 ## Proxy features
-
-This package uses these features:
 * OS X adaptive firewall
 * Adaptive firewall to brute force attacks
 * IP blocks updated about twice a day from emergingthreats.net (IP blocks, compromised hosts, Malvertisers) and [dshield.org](https://secure.dshield.org)’s top-20
