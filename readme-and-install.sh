@@ -213,13 +213,11 @@ $SUDO $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac.orig
 # Compile and install adblock2privoxy
 if ! [ -x $ADBLOCK2PRIVOXY ]
 then
-    $CD ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy
-    # ensure that macOS /usr/bin/gcc is the C compiler
     $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy
-    PATH=/usr/bin:$PATH STACK_ROOT=/usr/local/etc/.stack $STACK setup
-    PATH=/usr/bin:$PATH STACK_ROOT=/usr/local/etc/.stack $STACK install --local-bin-path /usr/local/bin
+    $SUDO $RSYNC -a easylist-pac-privoxy/adblock2privoxy/adblock2privoxy* /usr/local/etc/adblock2privoxy
+    # ensure that macOS /usr/bin/gcc is the C compiler    
+    $SUDO -E $SH -c 'export PATH=/usr/bin:$PATH ; export STACK_ROOT=/usr/local/etc/.stack ; ( /usr/bin/cd /usr/local/etc/adblock2privoxy/adblock2privoxy ; /usr/local/bin/stack setup --allow-different-user ; /usr/local/bin/stack install --local-bin-path /usr/local/bin --allow-different-user )'
     $SUDO $INSTALL -m 644 ./nginx.conf /usr/local/etc/adblock2privoxy
-    $CD ../../..
 fi
 
 # proxy configuration
