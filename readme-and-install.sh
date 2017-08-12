@@ -26,6 +26,7 @@ CP=/bin/cp
 RM=/bin/rm
 SH=/bin/sh
 FMT=/usr/bin/fmt
+RSYNC=/usr/bin/rsync
 STACK=/usr/local/bin/stack
 ADBLOCK2PRIVOXY=/usr/local/bin/adblock2privoxy
 
@@ -177,11 +178,13 @@ Keep your gpg keychain up to date by checking the keys IDs with these commands:
 
 /opt/local/bin/gpg --verify /usr/local/etc/block.txt.asc /usr/local/etc/block.txt
 /usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts && /opt/local/bin/gpg --verify /tmp/hphosts/hosts.txt.asc /tmp/hphosts/hosts.txt
-/opt/local/bin/7za x -aoa -o/tmp /usr/local/etc/AutoPac_EN.unx.7z AutoPac_EN.unx && /opt/local/bin/gpg --verify /tmp/AutoPac_EN.unx/proxy_en.sig /tmp/AutoPac_EN.unx/proxy_en
 GPGID
 $ECHO 'To delete expited keys, see http://superuser.com/questions/594116/clean-up-my-gnupg-keyring/594220#comment730593_594220'
+$ECHO 'These commands delete expired GPG keys:'
+$CAT <<DELETE_EXPIRED_GPG_KEYS
 $SUDO $GPG --homedir /var/root/.gnupg --list-keys | $AWK '/^pub.* \[expired\: / {id=$2; sub(/^.*\//, "", id); print id}' | $FMT -w 999 | $SED 's/^/gpg --delete-keys /;'
 $SUDO $GPG --homedir /var/root/.gnupg --delete-keys KeyIDs ...
+DELETE_EXPIRED_GPG_KEYS
 
 # apache for proxy.pac
 if ! [ -d /Applications/Server.app ]
@@ -216,8 +219,8 @@ then
     $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy
     $SUDO $RSYNC -a easylist-pac-privoxy/adblock2privoxy/adblock2privoxy* /usr/local/etc/adblock2privoxy
     # ensure that macOS /usr/bin/gcc is the C compiler    
-    $SUDO -E $SH -c 'export PATH=/usr/bin:$PATH ; export STACK_ROOT=/usr/local/etc/.stack ; ( /usr/bin/cd /usr/local/etc/adblock2privoxy/adblock2privoxy ; /usr/local/bin/stack setup --allow-different-user ; /usr/local/bin/stack install --local-bin-path /usr/local/bin --allow-different-user )'
-    $SUDO $INSTALL -m 644 ./nginx.conf /usr/local/etc/adblock2privoxy
+    $SUDO -E $SH -c 'export PATH=/usr/bin:$PATH ; export STACK_ROOT=/usr/local/etc/.stack ; ( cd /usr/local/etc/adblock2privoxy/adblock2privoxy ; /usr/local/bin/stack setup --allow-different-user ; /usr/local/bin/stack install --local-bin-path /usr/local/bin --allow-different-user )'
+    $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/nginx.conf /usr/local/etc/adblock2privoxy
 fi
 
 # proxy configuration
@@ -236,7 +239,7 @@ $SUDO $INSTALL -m 644 -B .orig ./Squid.wrapper /opt/local/etc/LaunchDaemons/org.
 
 # rotate squid logs
 $SUDO $INSTALL -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
-if ![ -d /opt/local/var/squid/logs ]; then
+if ! [ -d /opt/local/var/squid/logs ]; then
     $SUDO $MKDIR -p -m 644 /opt/local/var/squid/logs
     $SUDO $CHOWN -R squid:squid /opt/local/var/squid
 fi
@@ -249,11 +252,11 @@ $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/config ./config > /tmp/config.
 $SUDO $PATCH -p5 /opt/local/etc/privoxy/config < /tmp/config.patch
 $RM /tmp/config.patch
 
-#match.all
-$SUDO $INSTALL -m 640 -B .orig /opt/local/etc/privoxy/match.all /opt/local/etc/privoxy/match.all.orig
-$DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/match.all ./match.all > /tmp/match.all.patch
-$SUDO $PATCH -p5 /opt/local/etc/privoxy/match.all < /tmp/match.all.patch
-$RM /tmp/match.all.patch
+#match-all.action
+$SUDO $INSTALL -m 640 -B .orig /opt/local/etc/privoxy/match-all.action /opt/local/etc/privoxy/match-all.action.orig
+$DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/match-all.action ./match-all.action > /tmp/match-all.action.patch
+$SUDO $PATCH -p5 /opt/local/etc/privoxy/match-all.action < /tmp/match-all.action.patch
+$RM /tmp/match-all.action.patch
 
 #user.action
 $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/privoxy/user.action /opt/local/etc/privoxy/user.action.orig
@@ -262,7 +265,7 @@ $SUDO $PATCH -p5 /opt/local/etc/privoxy/user.action < /tmp/user.action.patch
 $RM /tmp/user.action.patch
 
 #privoxy logs
-if ![ -d /opt/local/var/log/privoxy ]; then
+if ! [ -d /opt/local/var/log/privoxy ]; then
     $SUDO $MKDIR -m 644 /opt/local/var/log/privoxy
     $SUDO $CHOWN privoxy:privoxy /opt/local/var/log/privoxy
 fi
@@ -276,8 +279,8 @@ $SUDO $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemon
 $SUDO $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
 $SUDO $INSTALL -m 644 ./com.github.essandess.easylist-pac.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
+$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
+$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
 $INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
 $SUDO $MKDIR -p /usr/local/etc
 $SUDO $INSTALL -m 644 ./blockips.conf /usr/local/etc
