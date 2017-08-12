@@ -1072,7 +1072,7 @@ enforce-blocks 0
 #        permit-access  [::ffff:192.0.2.0]/120
 #
 #
-permit-access  10.0.1.0/8
+#permit-access  10.0.1.0/8
 
 #  4.8. buffer-limit
 #  ==================

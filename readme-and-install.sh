@@ -264,6 +264,8 @@ $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/user.action ./user.action > /t
 $SUDO $PATCH -p5 /opt/local/etc/privoxy/user.action < /tmp/user.action.patch
 $RM /tmp/user.action.patch
 
+$SUDO $BASH -c '( cd /opt/local/etc/privoxy ; chown privoxy:privoxy config* *.action *.filter )'
+
 #privoxy logs
 if ! [ -d /opt/local/var/log/privoxy ]; then
     $SUDO $MKDIR -m 644 /opt/local/var/log/privoxy
