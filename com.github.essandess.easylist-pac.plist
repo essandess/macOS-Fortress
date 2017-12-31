@@ -10,7 +10,7 @@
 	<array>
 		<string>/bin/bash</string>
  		<string>-c</string>
-	<string>export PATH=$PATH:/opt/local/bin ; export PROXY_PAC_DIRECTORY=/Library/WebServer/Documents ; export PYTHONIOENCODING=utf_8 ; /bin/mkdir -p /usr/local/etc ; ( /bin/test -f $PROXY_PAC_DIRECTORY/proxy.pac.orig || /usr/bin/install -m 644 -S $PROXY_PAC_DIRECTORY/proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac.orig ) &amp;&amp; /usr/local/bin/easylist_pac.py -b 127.0.0.1:8119 -d /usr/local/etc -P $PROXY_PAC_DIRECTORY/proxy.pac.orig &amp;&amp; /usr/bin/install -m 644 -g admin -S /usr/local/etc/proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac</string>
+	<string>export PATH=$PATH:/opt/local/bin ; export PROXY_PAC_DIRECTORY=/Library/WebServer/Documents ; export PYTHONIOENCODING=utf_8 ; /bin/mkdir -p /usr/local/etc ; ( /bin/test -f $PROXY_PAC_DIRECTORY/proxy.pac.orig || /usr/bin/install -m 644 -S $PROXY_PAC_DIRECTORY/proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac.orig ) &amp;&amp; /usr/local/bin/easylist_pac.py -p 127.0.0.1:3128 -b 127.0.0.1:8119 -d /usr/local/etc -P $PROXY_PAC_DIRECTORY/proxy.pac.orig &amp;&amp; /usr/bin/install -m 644 -g admin -S /usr/local/etc/proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac</string>
 	</array>
         <key>RunAtLoad</key>
         <true/>
