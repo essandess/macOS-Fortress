@@ -1567,7 +1567,7 @@ split-large-forms 0
 #
 #      keep-alive-timeout 300
 #
-keep-alive-timeout 5
+keep-alive-timeout 300
 #
 #  6.5. tolerate-pipelining
 #  =========================
@@ -1610,7 +1610,7 @@ keep-alive-timeout 5
 #
 #      tolerate-pipelining 1
 #
-tolerate-pipelining 1
+#tolerate-pipelining 1
 #
 #  6.6. default-server-timeout
 #  ============================
@@ -1661,7 +1661,7 @@ tolerate-pipelining 1
 #
 #      default-server-timeout 60
 #
-#default-server-timeout 60
+default-server-timeout 60
 #
 #  6.7. connection-sharing
 #  ========================
@@ -1731,7 +1731,7 @@ tolerate-pipelining 1
 #
 #      connection-sharing 1
 #
-#connection-sharing 1
+connection-sharing 0
 #
 #  6.8. socket-timeout
 #  ====================
@@ -1763,7 +1763,7 @@ tolerate-pipelining 1
 #
 #      socket-timeout 300
 #
-socket-timeout 300
+socket-timeout 6
 #
 #  6.9. max-client-connections
 #  ============================
@@ -1825,7 +1825,7 @@ socket-timeout 300
 #
 #      max-client-connections 256
 #
-#max-client-connections 256
+max-client-connections 256
 #
 #  6.10. handle-as-empty-doc-returns-ok
 #  =====================================
@@ -1904,7 +1904,7 @@ socket-timeout 300
 #      Privoxy will not compress buffered content below a certain
 #      length.
 #
-#enable-compression 1
+enable-compression 1
 #
 #  6.12. compression-level
 #  ========================
@@ -1950,7 +1950,7 @@ socket-timeout 300
 #          compression-level 0
 #
 #
-#compression-level 1
+compression-level 9
 #
 #  6.13. client-header-order
 #  ==========================
