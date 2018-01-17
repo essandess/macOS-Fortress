@@ -1,10 +1,11 @@
 #!/bin/bash
 
-# osxfortress_boot_check -- check to make sure that all desired services are running
+# macosfortress_boot_check -- check to make sure that all desired services are running
 
 # commands
 SUDO=/usr/bin/sudo
 LAUNCHCTL=/bin/launchctl
+PORT=/opt/local/bin/port
 PFCTL=/sbin/pfctl
 HEAD=/usr/bin/head
 TAIL=/usr/bin/tail
@@ -19,14 +20,14 @@ fi
 
 # privoxy
 if ! [[ `$SUDO $LSOF -i ':8118' | $TAIL -1` ]]; then
-    $SUDO $LAUNCHCTL unload -w /Library/LaunchDaemons/org.macports.Privoxy.plist
-    $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.Privoxy.plist
+    $SUDO $PORT unload privoxy
+    $SUDO $PORT load privoxy
 fi
 
 # squid
 if ! [[ `$SUDO $LSOF -i ':3128' | $TAIL -1` ]]; then
-    $SUDO $LAUNCHCTL unload -w /Library/LaunchDaemons/org.macports.Squid.plist
-    $SUDO $KILLALL '(squid)'
-    $SUDO $KILLALL squid
-    $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.Squid.plist
+    $SUDO $PORT unload squid3
+    $SUDO $KILLALL 'squid'
+    $SUDO $KILLALL '(squid-1)'
+    $SUDO $PORT load squid3
 fi
