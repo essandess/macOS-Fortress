@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-# OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
+# macOS Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
 
 # commands
@@ -31,10 +31,10 @@ STACK=/usr/local/bin/stack
 ADBLOCK2PRIVOXY=/usr/local/bin/adblock2privoxy
 
 $CAT <<'HELPSTRING' | $MORE
-OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
+macOS Fortress: Firewall, Blackhole, and Privatizing Proxy
 for Trackers, Attackers, Malware, Adware, and Spammers
 
-Kernel-level, OS-level, and client-level security for OS X. Built to
+Kernel-level, OS-level, and client-level security for macOS. Built to
 address a steady stream of attacks visible on snort and server logs,
 as well as blocks ads, malicious scripts, and conceal information used
 to track you around the web. After this package was installed, snort
@@ -47,7 +47,7 @@ phishing links.
 
 This package uses these features:
 
-	* OS X adaptive firewall
+	* macOS adaptive firewall
 	* Adaptive firewall to brute force attacks
 	* IP blocks updated about twice a day from emergingthreats.net
 	  (IP blocks, compromised hosts, Malvertisers) and
@@ -55,16 +55,16 @@ This package uses these features:
 	* Host blocks updated about twice a day from hphosts.net
 	* Special proxy.pac host blacklisting from hostsfile.org
 
-This install script installs and configures an OS X Firewall and Privatizing
+This install script installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
 
 	* Prompt you to install Apple's Xcode Command Line Tools and
 	  Macports <https://www.macports.org/> Uses Macports to
 	* Download and install several key utilities and applications
 	  (wget gnupg p7zip squid privoxy nmap)
-	* Configure OS X's PF native firewall (man pfctl, man pf.conf),
+	* Configure macOS's PF native firewall (man pfctl, man pf.conf),
 	  squid, and privoxy
-	* Turn on OS X's native Apache webserver to serve the
+	* Turn on macOS's native Apache webserver to serve the
 	  Automatic proxy configuration http://localhost/proxy.pac
 	* Networking on the local computer can be set up to use this
           Automatic Proxy Configuration without breaking App Store or
@@ -111,7 +111,7 @@ Notes:
 	  the squid proxy to use the updates.
 	* Sometimes pf and privoxy do not launch at boot, in spite of
 	  the use of the use of their launch daemons.  Fix this by
-	  hand after boot with the scripts osxfortress_boot_check, or
+	  hand after boot with the scripts macosfortress_boot_check, or
 	  individually using pf_restart, privoxy_restart, and
 	  squid_restart. And please post a solution if you find one.
 	* All open source updates are done using the 'wget -N' option
@@ -131,7 +131,7 @@ $ECHO "Installing..."
 
 # prerequisites
 
-# Install OS X Command Line Tools
+# Install macOS Command Line Tools
 CLT_DIR=`xcode-select -p`
 RV=$?
 if ! [ $RV -eq '0' ]
@@ -189,11 +189,11 @@ DELETE_EXPIRED_GPG_KEYS
 # apache for proxy.pac
 if ! [ -d /Applications/Server.app ]
 then
-    # OS X native apache server for proxy.pac
+    # macOS native apache server for proxy.pac
     PROXY_PAC_DIRECTORY=/Library/WebServer/Documents
     $SUDO $APACHECTL start
 else
-    # OS X Server for proxy.pac
+    # macOS Server for proxy.pac
     PROXY_PAC_DIRECTORY=/Library/Server/Web/Data/Sites/proxy.mydomainname.private
     if [ -d $PROXY_PAC_DIRECTORY ]
     then
@@ -291,7 +291,7 @@ $SUDO $INSTALL -m 644 ./whitelist.txt /usr/local/etc
 $SUDO $INSTALL -m 644 ./blacklist.txt /usr/local/etc
 
 $SUDO $INSTALL -m 755 ./pf_attacks /usr/local/bin
-$SUDO $INSTALL -m 755 ./osxfortress_boot_check /usr/local/bin
+$SUDO $INSTALL -m 755 ./macosfortress_boot_check /usr/local/bin
 $SUDO $INSTALL -m 755 ./pf_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO $INSTALL -m 755 ./privoxy_restart /usr/local/bin
@@ -314,7 +314,7 @@ $SUDO $PORT load squid
 $SUDO $PORT load privoxy
 
 
-# Turn on OS X Server's adaptive firewall:
+# Turn on macOS Server's adaptive firewall:
 if [ -d /Applications/Server.app ]
 then
     $SUDO /Applications/Server.app/Contents/ServerRoot/usr/sbin/serverctl enable service=com.apple.afctl
@@ -323,7 +323,7 @@ fi
 
 
 # check after boot
-# /usr/local/bin/osxfortress_boot_check
+# /usr/local/bin/macosfortress_boot_check
 
 
 exit 0

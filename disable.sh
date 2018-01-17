@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-# OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
+# macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
 
 # disable.sh
@@ -15,9 +15,9 @@ CAT=/bin/cat
 ECHO=/bin/echo
 
 $CAT <<HELPSTRING
-OS X Fortress: Firewall, Blackhole, and Privatizing Proxy
+macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy
 for Trackers, Attackers, Malware, Adware, and Spammers
-Kernel-level, OS-level, and client-level security for OS X. 
+Kernel-level, OS-level, and client-level security for macOS.
 
 This disable script will unload all launch daemons, disable
 the pf firewall, and list all insalled files WITHOUT removing them.
@@ -83,7 +83,7 @@ for FNAME in \
 	/usr/local/etc/blockips.conf \
 	/usr/local/etc/whitelist.txt \
 	/usr/local/etc/blacklist.txt \
-	/usr/local/bin/osxfortress_boot_check \
+	/usr/local/bin/macosfortress_boot_check \
 	/usr/local/bin/pf_restart \
 	/usr/local/bin/squid_restart \
 	/usr/local/bin/privoxy_restart \
