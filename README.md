@@ -1,33 +1,33 @@
-osxfortress
+macOS-Fortress
 ===========
 
-# OS X Fortress: Firewall, Blackhole, and Privatizing Proxy for Trackers, Attackers, Malware, Adware, and Spammers
+# macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy for Trackers, Attackers, Malware, Adware, and Spammers
 
-Kernel-level, OS-level, and client-level security for OS X. Built to address a steady stream of attacks visible on snort and server logs, as well as blocks ads, malicious scripts, and conceal information used to track you around the web. After this package was installed, snort and other detections have fallen to a fraction with a few simple blocking actions.  This setup is a lot more capable and effective than using a simple adblocking browser add-on. There's a world of difference between ad-filled web pages with and without a filtering proxy server. It's also saved me from inadvertantly clicking on phishing links.
+Kernel-level, OS-level, and client-level security for maxOS. Built to address a steady stream of attacks visible on snort and server logs, as well as blocks ads, malicious scripts, and conceal information used to track you around the web. After this package was installed, snort and other detections have fallen to a fraction with a few simple blocking actions.  This setup is a lot more capable and effective than using a simple adblocking browser add-on. There's a world of difference between ad-filled web pages with and without a filtering proxy server. It's also saved me from inadvertantly clicking on phishing links.
 
 ## Proxy features
-* OS X adaptive firewall
+* macOS adaptive firewall
 * Adaptive firewall to brute force attacks
 * IP blocks updated about twice a day from emergingthreats.net (IP blocks, compromised hosts, Malvertisers) and [dshield.org](https://secure.dshield.org)’s top-20
 * Host blocks updated about twice a day from [hphosts.net](https://www.hosts-file.net)
 * [EasyList](https://easylist.to/index.html) Tracker and Adblock Rules to Proxy Auto Configuration (PAC) [proxy.pac](https://raw.githubusercontent.com/essandess/easylist-pac-privoxy/master/proxy.pac) file and [Privoxy](http://www.privoxy.org) Actions and Filters
 * Uses [easylist-pac-privoxy](../../../easylist-pac-privoxy) and [adblock2privoxy](../../../adblock2privoxy) to easily incorporate multiple blocking rulesets into both PAC and Privoxy formats, including [easyprivacy.txt](https://easylist.to/easylist/easyprivacy.txt), [easylist.txt](https://easylist.to/easylist/easylist.txt), [fanboy-annoyance.txt](https://easylist.to/easylist/fanboy-annoyance.txt), [fanboy-social.txt](https://easylist.to/easylist/fanboy-social.txt), [antiadblockfilters.txt](https://easylist-downloads.adblockplus.org/antiadblockfilters.txt), [malwaredomains_full.txt](https://easylist-downloads.adblockplus.org/malwaredomains_full.txt), and the anti-spamware list [adblock-list.txt](https://raw.githubusercontent.com/Dawsey21/Lists/master/adblock-list.txt).
 
-The install script [readme-and-install.sh](readme-and-install.sh) installs and configures an OS X Firewall and Privatizing
+The install script [readme-and-install.sh](readme-and-install.sh) installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
 * Prompt you to install Apple's Xcode Command Line Tools and [Macports](https://www.macports.org/)
 * Uses Macports to download and install several key utilities and applications (wget gnupg p7zip squid privoxy nmap)
-* Configure OS X's PF native firewall (man pfctl, man pf.conf), squid, and privoxy
-* Turn on OS X's native Apache webserver to serve the Automatic proxy configuration http://localhost/proxy.pac
+* Configure macOS's PF native firewall (man pfctl, man pf.conf), squid, and privoxy
+* Turn on macOS's native Apache webserver to serve the Automatic proxy configuration http://localhost/proxy.pac
 * Networking on the local computer can be set up to use this Automatic Proxy Configuration without breaking App Store or other updates (see squid.conf)
-* Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../../../osx-openvpn-server)
+* Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../../../macos-openvpn-server)
 * Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and [EasyList](https://easylist.to) (com.github.essandess.easylist-pac.plist, com.github.essandess.adblock2privoxy.plist)
 * Installs a user launch daemon that deletes flash cookies not related to Adobe Flash Player settings every half-hour  (http://goo.gl/k4BxuH)
 * After installation the connection between clients and the internet looks this this:
 
-> **Application** :arrow_right:port 3128:arrow_right: **Squid** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
+> **Application** :arrow_right: **`proxy.pac`** :arrow_right:port 3128:arrow_right: **Squid** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
 
-An auxilliary nginx-based webserver (nominally on `localhost:8119`) for CSS element blocking rules is also used by the Privoxy configuration generated by [adblock2privoxy](../../../adblock2privoxy).
+An auxilliary nginx-based webserver (nominally on `localhost:8119`) is used for both a `proxy.pac` ad and tracker blackhole and for CSS element blocking rules with the Privoxy configuration generated by [adblock2privoxy](../../../adblock2privoxy).
 
 ## Public Service Announcement 
 
@@ -59,8 +59,8 @@ snort+BASE Overview | snort+BASE Events
 ## Installation
 
 ```
-git clone --recurse https://github.com/essandess/osxfortress.git
-cd osxfortress
+git clone --recurse https://github.com/essandess/macOS-Fortress.git
+cd macOS-Fortress
 sudo sh ./readme-and-install.sh
 ```
 
@@ -76,7 +76,7 @@ sudo sh ./disable.sh
 * Count the number of attacks since boot with the script pf_attacks. ``Attack'' is defined as the number of blocked IPs in PF's bruteforce table plus the number of denied connections from blacklisted IPs in the tables compromised_ips, dshield_block_ip, and emerging_threats.
 * Both squid and Privoxy are configured to forge the User-Agent. The default is an iPad to allow mobile device access. Change this to your local needs if necessary.
 * Whitelist or blacklist specific domain names with the files `/usr/local/etc/whitelist.txt` and `/usr/local/etc/blacklist.txt`. After editing these file, use launchctl to unload and load the plist `/Library/LaunchDaemons/net.hphosts.hosts.plist`, which recreates the hostfile `/etc/hosts-hphost` and reconfigures the squid proxy to use the updates.
-* Sometimes pf and privoxy do not launch at boot, in spite of the use of the use of their launch daemons.  Fix this by hand after boot with the scripts `osxfortress_boot_check`, or individually using `pf_restart`, `privoxy_restart`, and `squid_restart`. And please post a solution if you find one.
+* Sometimes pf and privoxy do not launch at boot, in spite of the use of the use of their launch daemons.  Fix this by hand after boot with the scripts `macosfortress_boot_check`, or individually using `pf_restart`, `privoxy_restart`, and `squid_restart`. And please post a solution if you find one.
 * All open source updates are done using the `wget -N` option to save everyone's bandwidth
 
 ## Security
