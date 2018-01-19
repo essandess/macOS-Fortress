@@ -89,7 +89,6 @@ for FNAME in \
 	/usr/local/bin/privoxy_restart \
 	/usr/local/bin/easylist_pac.py \
 	/usr/local/bin/adblock2privoxy \
-	/opt/local/etc/LaunchDaemons/org.macports.Squid/Squid.wrapper.orig \
 	; do
 	fname_exists
 done

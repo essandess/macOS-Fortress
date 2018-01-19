@@ -235,9 +235,6 @@ $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/squid/squid.conf ./squid.conf > /tmp/s
 $SUDO $PATCH -p5 /opt/local/etc/squid/squid.conf < /tmp/squid.conf.patch
 $RM /tmp/squid.conf.patch
 
-# squid -N no daemon mode to avoid launchd issue and multiple squid jobs
-$SUDO $INSTALL -m 644 -B .orig ./Squid.wrapper /opt/local/etc/LaunchDaemons/org.macports.Squid
-
 # rotate squid logs
 $SUDO $INSTALL -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
 if ! [ -d /opt/local/var/squid/logs ]; then
