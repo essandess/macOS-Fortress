@@ -161,9 +161,9 @@ fi
 # Proxy settings in /opt/local/etc/macports/macports.conf
 $SUDO $PORT selfupdate
 
-# Install wget, gnupg, 7z, proxies, perl, and python modules
+# Install wget, gnupg, 7z, pcre, proxies, perl, and python modules
 $SUDO $PORT uninstall squid && $SUDO $PORT clean --dist squid
-$SUDO $PORT install wget gnupg p7zip squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
+$SUDO $PORT install wget gnupg p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
 $SUDO $PORT select --set python3 python36
 $SUDO $CPAN install
 $SUDO $CPAN -i Data::Validate::IP
