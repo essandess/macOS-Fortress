@@ -409,7 +409,6 @@ actionsfile /usr/local/etc/adblock2privoxy/privoxy/ab2p.action
 #
 filterfile default.filter
 filterfile user.filter      # User customizations
-filterfile easylist.script.filter      # Adblock's converted customizations
 filterfile /usr/local/etc/adblock2privoxy/privoxy/ab2p.system.filter
 filterfile /usr/local/etc/adblock2privoxy/privoxy/ab2p.filter
 #
@@ -658,7 +657,7 @@ logfile logfile
 #      Note that Privoxy does not validate the specified hostname
 #      value.
 #
-#hostname hostname.example.org
+hostname localhost
 #
 #  4. ACCESS CONTROL AND SECURITY
 #  ===============================
