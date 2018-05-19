@@ -260,7 +260,7 @@
 #
 #      No trailing "/", please.
 #
-confdir /opt/local/etc/privoxy
+confdir /usr/local/etc/privoxy
 #
 #  2.2. templdir
 #  ==============
@@ -315,7 +315,7 @@ confdir /opt/local/etc/privoxy
 #
 #      No trailing "/", please.
 #
-logdir /opt/local/var/log/privoxy
+logdir /usr/local/var/log/privoxy
 #
 #  2.4. actionsfile
 #  =================

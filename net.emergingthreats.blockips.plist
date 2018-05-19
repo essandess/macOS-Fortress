@@ -10,7 +10,7 @@
 	<array>
 		<string>/bin/bash</string>
  		<string>-c</string>
-	<string>/bin/mkdir -p /usr/local/etc ; /opt/local/bin/wget -N -P /usr/local/etc http://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt ; /opt/local/bin/wget -N -P /usr/local/etc http://rules.emergingthreats.net/blockrules/compromised-ips.txt ; /sbin/pfctl -a blockips -T load -f /usr/local/etc/blockips.conf</string>
+	<string>/bin/mkdir -p /usr/local/etc ; /usr/local/bin/wget -N -P /usr/local/etc http://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt ; /usr/local/bin/wget -N -P /usr/local/etc http://rules.emergingthreats.net/blockrules/compromised-ips.txt ; /sbin/pfctl -a blockips -T load -f /usr/local/etc/blockips.conf</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>

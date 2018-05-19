@@ -1,36 +1,37 @@
 #!/bin/bash -x
+# shellcheck disable=SC2016,SC1117
 
 # macOS Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
 
 # commands
-SUDO=/usr/bin/sudo
-INSTALL=/usr/bin/install
-PORT=/opt/local/bin/port
-CPAN=/usr/bin/cpan
-GPG=/opt/local/bin/gpg
-CURL=/usr/bin/curl
-OPEN=/usr/bin/open
-DIFF=/usr/bin/diff
-PATCH=/usr/bin/patch
-LAUNCHCTL=/bin/launchctl
-APACHECTL=/usr/sbin/apachectl
-SERVERADMIN=/Applications/Server.app/Contents/ServerRoot/usr/sbin/serveradmin
-PFCTL=/sbin/pfctl
-MKDIR=/bin/mkdir
-CAT=/bin/cat
-ECHO=/bin/echo
-MORE=/usr/bin/more
-LSOF=/usr/sbin/lsof
-CP=/bin/cp
-RM=/bin/rm
-SH=/bin/sh
-FMT=/usr/bin/fmt
-RSYNC=/usr/bin/rsync
-STACK=/usr/local/bin/stack
-ADBLOCK2PRIVOXY=/usr/local/bin/adblock2privoxy
+SUDO="/usr/bin/sudo"
+INSTALL="/usr/bin/install"
+BREW="$(command -v brew)" # homebrew can be installed anywhere.
+CPAN="/usr/bin/cpan"
+GPG="/usr/local/bin/gpg"
+CURL="/usr/bin/curl"
+# OPEN="/usr/bin/open"
+DIFF="/usr/bin/diff"
+PATCH="/usr/bin/patch"
+LAUNCHCTL="/bin/launchctl"
+APACHECTL="/usr/sbin/apachectl"
+SERVERADMIN="/Applications/Server.app/Contents/ServerRoot/usr/sbin/serveradmin"
+# PFCTL="/sbin/pfctl"
+MKDIR="/bin/mkdir"
+CAT="/bin/cat"
+ECHO="/bin/echo"
+MORE="/usr/bin/more"
+# LSOF="/usr/sbin/lsof"
+CP="/bin/cp"
+RM="/bin/rm"
+SH="/bin/sh"
+FMT="/usr/bin/fmt"
+RSYNC="/usr/bin/rsync"
+# STACK="/usr/local/bin/stack"
+ADBLOCK2PRIVOXY="/usr/local/bin/adblock2privoxy"
 
-$CAT <<'HELPSTRING' | $MORE
+"${CAT}" <<'HELPSTRING' | "${MORE}"
 macOS Fortress: Firewall, Blackhole, and Privatizing Proxy
 for Trackers, Attackers, Malware, Adware, and Spammers
 
@@ -127,102 +128,83 @@ Security:
 	  you ever change this or you will be running an open web proxy.
 HELPSTRING
 
-$ECHO "Installing..."
+"${ECHO}" "Installing..."
 
 # prerequisites
 
 # Install macOS Command Line Tools
-CLT_DIR=`xcode-select -p`
-RV=$?
-if ! [ $RV -eq '0' ]
-then
-    $SUDO /usr/bin/xcode-select --install
-    $SUDO /usr/bin/xcodebuild -license
+if ! xcode-select -p &>/dev/null; then
+	"${SUDO}" /usr/bin/xcode-select --install
+	"${SUDO}" /usr/bin/xcodebuild -license
 fi
 
-# Install MacPorts
-if ! [ -x $PORT ]
-then
-    $OPEN -a Safari https://www.macports.org/install.php
-    $CAT <<MACPORTS
-Please download and install Macports from https://www.macports.org/install.php
-then run this script again.
-MACPORTS
-    exit 1
-fi
+# check for homebrew
+[[ -x "${BREW}" ]] && /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-# Install stack for adblock2privoxy
-# https://docs.haskellstack.org/en/stable/install_and_upgrade/
-if ! [ -x $STACK ]
-then
-    $CURL -sSL https://get.haskellstack.org/ | $SH
-fi
-
-# Proxy settings in /opt/local/etc/macports/macports.conf
-$SUDO $PORT selfupdate
+# Proxy settings in /usr/local/etc/macports/macports.conf
+"${BREW}" update && "${BREW}" outdated && "${BREW}" upgrade && "${BREW}" cleanup
 
 # Install wget, gnupg, 7z, pcre, proxies, perl, and python modules
-$SUDO $PORT uninstall squid && $SUDO $PORT clean --dist squid
-$SUDO $PORT install wget gnupg p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
-$SUDO $PORT select --set python3 python36
-$SUDO $CPAN install
-$SUDO $CPAN -i Data::Validate::IP
-$SUDO $CPAN -i Data::Validate::Domain
+
+# we don't need to do this with homebrew, since squid would be updated if it were extant above
+# command -v squid &>/dev/null && "${BREW}" uninstall squid && "${BREW}" cleanup
+"${BREW}" install wget gnupg p7zip pcre squid privoxy nginx nmap python3 haskell-stack
+"${PIP3}" install scikit-learn matplotlib numpy
+"${SUDO}" "${CPAN}" install
+"${SUDO}" "${CPAN}" -i Data::Validate::IP
+"${SUDO}" "${CPAN}" -i Data::Validate::Domain
 # Used to verify downloads
-$SUDO $CURL -O https://secure.dshield.org/PGPKEYS.txt
-$SUDO $GPG --homedir /var/root/.gnupg --import PGPKEYS.txt
-$SUDO $GPG --homedir /var/root/.gnupg --recv-keys C1E94509 608D9001
-$SUDO $GPG --homedir /var/root/.gnupg --list-keys
-$CAT <<'GPGID'
+"${SUDO}" "${CURL}" -O https://secure.dshield.org/PGPKEYS.txt
+"${SUDO}" "${GPG}" --homedir /var/root/.gnupg --import PGPKEYS.txt
+"${SUDO}" "${GPG}" --homedir /var/root/.gnupg --recv-keys C1E94509 608D9001
+"${SUDO}" "${GPG}" --homedir /var/root/.gnupg --list-keys
+"${CAT}" <<'GPGID'
 Keep your gpg keychain up to date by checking the keys IDs with these commands:
 
-/opt/local/bin/gpg --verify /usr/local/etc/block.txt.asc /usr/local/etc/block.txt
-/usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts && /opt/local/bin/gpg --verify /tmp/hphosts/hosts.txt.asc /tmp/hphosts/hosts.txt
+/usr/local/bin/gpg --verify /usr/local/etc/block.txt.asc /usr/local/etc/block.txt
+/usr/bin/unzip -o /usr/local/etc/hosts.zip -d /tmp/hphosts && /usr/local/bin/gpg --verify /tmp/hphosts/hosts.txt.asc /tmp/hphosts/hosts.txt
 GPGID
-$ECHO 'To delete expited keys, see http://superuser.com/questions/594116/clean-up-my-gnupg-keyring/594220#comment730593_594220'
-$ECHO 'These commands delete expired GPG keys:'
-$CAT <<DELETE_EXPIRED_GPG_KEYS
-$SUDO $GPG --homedir /var/root/.gnupg --list-keys | $AWK '/^pub.* \[expired\: / {id=$2; sub(/^.*\//, "", id); print id}' | $FMT -w 999 | $SED 's/^/gpg --delete-keys /;'
-$SUDO $GPG --homedir /var/root/.gnupg --delete-keys KeyIDs ...
+"${ECHO}" 'To delete expited keys, see http://superuser.com/questions/594116/clean-up-my-gnupg-keyring/594220#comment730593_594220'
+"${ECHO}" 'These commands delete expired GPG keys:'
+"${CAT}" <<DELETE_EXPIRED_GPG_KEYS
+"${SUDO}" "${GPG}" --homedir /var/root/.gnupg --list-keys | "${AWK}" '/^pub.* \[expired\: / {id="${2}"; sub(/^.*\//, "", id); print id}' | "${FMT}" -w 999 | "${SED}" 's/^/gpg --delete-keys /;'
+"${SUDO}" "${GPG}" --homedir /var/root/.gnupg --delete-keys KeyIDs ...
 DELETE_EXPIRED_GPG_KEYS
 
 # apache for proxy.pac
-if ! [ -d /Applications/Server.app ]
-then
-    # macOS native apache server for proxy.pac
-    PROXY_PAC_DIRECTORY=/Library/WebServer/Documents
-    $SUDO $APACHECTL start
+if ! [ -d /Applications/Server.app ]; then
+	# macOS native apache server for proxy.pac
+	PROXY_PAC_DIRECTORY="/Library/WebServer/Documents"
+	"${SUDO}" "${APACHECTL}" start
 else
-    # macOS Server for proxy.pac
-    PROXY_PAC_DIRECTORY=/Library/Server/Web/Data/Sites/proxy.mydomainname.private
-    if [ -d $PROXY_PAC_DIRECTORY ]
-    then
-        $CAT <<PROXY_PAC_DNS
+	# macOS Server for proxy.pac
+	PROXY_PAC_DIRECTORY="/Library/Server/Web/Data/Sites/proxy.mydomainname.private"
+	if [ -d "${PROXY_PAC_DIRECTORY}" ]; then
+		"${CAT}" <<PROXY_PAC_DNS
 Please use Server.app's DNS and Websites services to create the hostname and website
 ${PROXY_PAC_DIRECTORY##*/}, edit the configuration files
 
-	`fgrep -l mydomain ./* | tr '\n'  ' '`
+	$(/usr/bin/grep -F -l mydomain ./* | tr '\n' ' ')
 
 to reflect this name, then run this script again.
 PROXY_PAC_DNS
-        exit 1
-    fi
-    $SUDO $SERVERADMIN stop web
-    $SUDO $SERVERADMIN start web
+		exit 1
+	fi
+	"${SUDO}" "${SERVERADMIN}" stop web
+	"${SUDO}" "${SERVERADMIN}" start web
 fi
-$SUDO $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY
-$SUDO $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac.orig
+"${SUDO}" "${INSTALL}" -m 644 ./proxy.pac "${PROXY_PAC_DIRECTORY}"
+"${SUDO}" "${INSTALL}" -m 644 ./proxy.pac "${PROXY_PAC_DIRECTORY}"/proxy.pac.orig
 
 # Compile and install adblock2privoxy
-if ! [ -x $ADBLOCK2PRIVOXY ]
-then
-    $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy
-    $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy/css
-    $SUDO $RSYNC -a easylist-pac-privoxy/adblock2privoxy/adblock2privoxy* /usr/local/etc/adblock2privoxy
-    # ensure that macOS /usr/bin/gcc is the C compiler
-    $SUDO -E $SH -c 'export PATH=/usr/bin:$PATH ; export STACK_ROOT=/usr/local/etc/.stack ; ( cd /usr/local/etc/adblock2privoxy/adblock2privoxy ; /usr/local/bin/stack setup --allow-different-user ; /usr/local/bin/stack install --local-bin-path /usr/local/bin --allow-different-user )'
-    $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/nginx.conf /usr/local/etc/adblock2privoxy
-    $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/default.html /usr/local/etc/adblock2privoxy/css
+if ! [ -x "${ADBLOCK2PRIVOXY}" ]; then
+	"${SUDO}" "${MKDIR}" -p /usr/local/etc/adblock2privoxy
+	"${SUDO}" "${MKDIR}" -p /usr/local/etc/adblock2privoxy/css
+	"${SUDO}" "${RSYNC}" -a easylist-pac-privoxy/adblock2privoxy/adblock2privoxy* /usr/local/etc/adblock2privoxy
+	# ensure that macOS /usr/bin/gcc is the C compiler
+	"${SUDO}" -E "${SH}" -c 'export PATH=/usr/bin:"${PATH}" ; export STACK_ROOT=/usr/local/etc/.stack ; ( cd /usr/local/etc/adblock2privoxy/adblock2privoxy ; /usr/local/bin/stack setup --allow-different-user ; /usr/local/bin/stack install --local-bin-path /usr/local/bin --allow-different-user )'
+	"${SUDO}" "${INSTALL}" -m 644 ./easylist-pac-privoxy/adblock2privoxy/nginx.conf /usr/local/etc/adblock2privoxy
+	"${SUDO}" "${INSTALL}" -m 644 ./easylist-pac-privoxy/adblock2privoxy/default.html /usr/local/etc/adblock2privoxy/css
 fi
 
 # proxy configuration
@@ -230,98 +212,94 @@ fi
 # squid
 
 #squid.conf
-$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf
-$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf.orig
-$DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/squid/squid.conf ./squid.conf > /tmp/squid.conf.patch
-$SUDO $PATCH -p5 /opt/local/etc/squid/squid.conf < /tmp/squid.conf.patch
-$RM /tmp/squid.conf.patch
+"${SUDO}" "${INSTALL}" -m 644 -B .orig /usr/local/etc/squid/squid.conf.default /usr/local/etc/squid/squid.conf
+"${SUDO}" "${INSTALL}" -m 644 -B .orig /usr/local/etc/squid/squid.conf.default /usr/local/etc/squid/squid.conf.orig
+"${DIFF}" -NaurdwB -I '^ *#.*' /usr/local/etc/squid/squid.conf ./squid.conf >/tmp/squid.conf.patch
+"${SUDO}" "${PATCH}" -p5 /usr/local/etc/squid/squid.conf </tmp/squid.conf.patch
+"${RM}" /tmp/squid.conf.patch
 
 # rotate squid logs
-$SUDO $INSTALL -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
-if ! [ -d /opt/local/var/squid/logs ]; then
-    $SUDO $MKDIR -p -m 644 /opt/local/var/squid/logs
-    $SUDO $CHOWN -R squid:squid /opt/local/var/squid
+"${SUDO}" "${INSTALL}" -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
+if ! [ -d /usr/local/var/squid/logs ]; then
+	"${SUDO}" "${MKDIR}" -p -m 644 /usr/local/var/squid/logs
+	"${SUDO}" "${CHOWN}" -R squid:squid /usr/local/var/squid
 fi
 
 # privoxy
 
 #config
-$SUDO $INSTALL -m 640 /opt/local/etc/privoxy/config /opt/local/etc/privoxy/config.orig
-$DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/config ./config > /tmp/config.patch
-$SUDO $PATCH -p5 /opt/local/etc/privoxy/config < /tmp/config.patch
-$RM /tmp/config.patch
+"${SUDO}" "${INSTALL}" -m 640 /usr/local/etc/privoxy/config /usr/local/etc/privoxy/config.orig
+"${DIFF}" -NaurdwB -I '^ *#.*' /usr/local/etc/privoxy/config ./config >/tmp/config.patch
+"${SUDO}" "${PATCH}" -p5 /usr/local/etc/privoxy/config </tmp/config.patch
+"${RM}" /tmp/config.patch
 
 #match-all.action
-$SUDO $INSTALL -m 640 -B .orig /opt/local/etc/privoxy/match-all.action /opt/local/etc/privoxy/match-all.action.orig
-$DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/match-all.action ./match-all.action > /tmp/match-all.action.patch
-$SUDO $PATCH -p5 /opt/local/etc/privoxy/match-all.action < /tmp/match-all.action.patch
-$RM /tmp/match-all.action.patch
+"${SUDO}" "${INSTALL}" -m 640 -B .orig /usr/local/etc/privoxy/match-all.action /usr/local/etc/privoxy/match-all.action.orig
+"${DIFF}" -NaurdwB -I '^ *#.*' /usr/local/etc/privoxy/match-all.action ./match-all.action >/tmp/match-all.action.patch
+"${SUDO}" "${PATCH}" -p5 /usr/local/etc/privoxy/match-all.action </tmp/match-all.action.patch
+"${RM}" /tmp/match-all.action.patch
 
 #user.action
-$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/privoxy/user.action /opt/local/etc/privoxy/user.action.orig
-$DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/user.action ./user.action > /tmp/user.action.patch
-$SUDO $PATCH -p5 /opt/local/etc/privoxy/user.action < /tmp/user.action.patch
-$RM /tmp/user.action.patch
+"${SUDO}" "${INSTALL}" -m 644 -B .orig /usr/local/etc/privoxy/user.action /usr/local/etc/privoxy/user.action.orig
+"${DIFF}" -NaurdwB -I '^ *#.*' /usr/local/etc/privoxy/user.action ./user.action >/tmp/user.action.patch
+"${SUDO}" "${PATCH}" -p5 /usr/local/etc/privoxy/user.action </tmp/user.action.patch
+"${RM}" /tmp/user.action.patch
 
-$SUDO $BASH -c '( cd /opt/local/etc/privoxy ; /usr/sbin/chown privoxy:privoxy config* *.action *.filter )'
+"${SUDO}" "${BASH}" -c '( cd /usr/local/etc/privoxy ; /usr/sbin/chown privoxy:privoxy config* *.action *.filter )'
 
 #privoxy logs
-if ! [ -d /opt/local/var/log/privoxy ]; then
-    $SUDO $MKDIR -m 644 /opt/local/var/log/privoxy
-    $SUDO $CHOWN privoxy:privoxy /opt/local/var/log/privoxy
+if ! [ -d /usr/local/var/log/privoxy ]; then
+	"${SUDO}" "${MKDIR}" -m 644 /usr/local/var/log/privoxy
+	"${SUDO}" "${CHOWN}" privoxy:privoxy /usr/local/var/log/privoxy
 fi
 
 # install the files
-$SUDO $CP /etc/hosts /etc/hosts.orig
-$SUDO $INSTALL -b -B .orig ./pf.conf /etc
-$SUDO $INSTALL -m 644 ./net.openbsd.pf.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./net.openbsd.pf.brutexpire.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./com.github.essandess.easylist-pac.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
-$SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
-$INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
-$SUDO $MKDIR -p /usr/local/etc
-$SUDO $INSTALL -m 644 ./blockips.conf /usr/local/etc
-$SUDO $INSTALL -m 644 ./whitelist.txt /usr/local/etc
-$SUDO $INSTALL -m 644 ./blacklist.txt /usr/local/etc
+"${SUDO}" "${CP}" /etc/hosts /etc/hosts.orig
+"${SUDO}" "${INSTALL}" -b -B .orig ./pf.conf /etc
+"${SUDO}" "${INSTALL}" -m 644 ./net.openbsd.pf.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./net.openbsd.pf.brutexpire.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./com.github.essandess.easylist-pac.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
+"${SUDO}" "${INSTALL}" -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
+"${INSTALL}" -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
+"${SUDO}" "${MKDIR}" -p /usr/local/etc
+"${SUDO}" "${INSTALL}" -m 644 ./blockips.conf /usr/local/etc
+"${SUDO}" "${INSTALL}" -m 644 ./whitelist.txt /usr/local/etc
+"${SUDO}" "${INSTALL}" -m 644 ./blacklist.txt /usr/local/etc
 
-$SUDO $INSTALL -m 755 ./pf_attacks /usr/local/bin
-$SUDO $INSTALL -m 755 ./macosfortress_boot_check /usr/local/bin
-$SUDO $INSTALL -m 755 ./pf_restart /usr/local/bin
-$SUDO $INSTALL -m 755 ./squid_restart /usr/local/bin
-$SUDO $INSTALL -m 755 ./privoxy_restart /usr/local/bin
-$SUDO $INSTALL -m 755 ./easylist-pac-privoxy/easylist_pac.py /usr/local/bin
+"${SUDO}" "${INSTALL}" -m 755 ./pf_attacks /usr/local/bin
+"${SUDO}" "${INSTALL}" -m 755 ./macosfortress_boot_check /usr/local/bin
+"${SUDO}" "${INSTALL}" -m 755 ./pf_restart /usr/local/bin
+"${SUDO}" "${INSTALL}" -m 755 ./squid_restart /usr/local/bin
+"${SUDO}" "${INSTALL}" -m 755 ./privoxy_restart /usr/local/bin
+"${SUDO}" "${INSTALL}" -m 755 ./easylist-pac-privoxy/easylist_pac.py /usr/local/bin
 
 # daemons
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.emergingthreats.blockips.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.dshield.block.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.easylist-pac.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
-$SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/net.openbsd.pf.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/net.emergingthreats.blockips.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/net.dshield.block.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/com.github.essandess.easylist-pac.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
+"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist
 
-$LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
+"${LAUNCHCTL}" load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
 
-$SUDO $PORT load squid
-$SUDO $PORT load privoxy
-
+"${SUDO}" "${BREW}" services start squid
+"${SUDO}" "${BREW}" services start privoxy
 
 # Turn on macOS Server's adaptive firewall:
-if [ -d /Applications/Server.app ]
-then
-    $SUDO /Applications/Server.app/Contents/ServerRoot/usr/sbin/serverctl enable service=com.apple.afctl
-    $SUDO /Applications/Server.app/Contents/ServerRoot/usr/libexec/afctl -f
+if [ -d /Applications/Server.app ]; then
+	"${SUDO}" /Applications/Server.app/Contents/ServerRoot/usr/sbin/serverctl enable service=com.apple.afctl
+	"${SUDO}" /Applications/Server.app/Contents/ServerRoot/usr/libexec/afctl -f
 fi
-
 
 # check after boot
 # /usr/local/bin/macosfortress_boot_check
-
 
 exit 0

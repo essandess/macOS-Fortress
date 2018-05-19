@@ -7,7 +7,7 @@
 
 # commands
 SUDO=/usr/bin/sudo
-PORT=/opt/local/bin/port
+PORT=/usr/local/bin/port
 LAUNCHCTL=/bin/launchctl
 PFCTL=/sbin/pfctl
 KILLALL=/usr/bin/killall
@@ -85,7 +85,7 @@ for FNAME in \
 	/usr/local/bin/squid_restart \
 	/usr/local/bin/privoxy_restart \
 	/usr/local/bin/privoxy-adblock.sh \
-	/opt/local/etc/LaunchDaemons/org.macports.Squid/Squid.wrapper.orig \
+	/usr/local/etc/LaunchDaemons/org.macports.Squid/Squid.wrapper.orig \
 	; do
 	fname_exists
 done

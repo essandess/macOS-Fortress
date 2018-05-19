@@ -8,7 +8,7 @@
 	<array>
 		<string>/bin/bash</string>
  		<string>-c</string>
-		<string>/opt/local/sbin/squid -k rotate ; find /opt/local/var/squid/logs -mindepth 1 -mtime +30 -exec /bin/rm {} &apos;;&apos;</string>
+		<string>/usr/local/sbin/squid -k rotate ; find /usr/local/var/squid/logs -mindepth 1 -mtime +30 -exec /bin/rm {} &apos;;&apos;</string>
 	</array>
 	<key>StartCalendarInterval</key>
 	<dict>

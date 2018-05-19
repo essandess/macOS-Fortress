@@ -14,7 +14,7 @@
 	<array>
                 <string>/bin/bash</string>
                 <string>-c</string>
-		<string>for tt in {1..4}; do if [[ `/sbin/ifconfig | /opt/local/bin/pcregrep -M -o &apos;^[^\t:]+:([^\n]|\n\t)*status: active&apos; | /usr/bin/egrep -o -m 1 &apos;^[^\t:]+&apos;` = &apos;&apos; ]]; then /bin/sleep 45; else /sbin/pfctl -Fall &amp;&amp; /sbin/pfctl -ef /etc/pf.conf; break; fi; done</string>
+		<string>for tt in {1..4}; do if [[ `/sbin/ifconfig | /usr/local/bin/pcregrep -M -o &apos;^[^\t:]+:([^\n]|\n\t)*status: active&apos; | /usr/bin/egrep -o -m 1 &apos;^[^\t:]+&apos;` = &apos;&apos; ]]; then /bin/sleep 45; else /sbin/pfctl -Fall &amp;&amp; /sbin/pfctl -ef /etc/pf.conf; break; fi; done</string>
 	</array>
 	<key>RunAtLoad</key>
 	<true/>

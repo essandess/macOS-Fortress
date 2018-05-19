@@ -6,18 +6,18 @@
 #
 # Init
 #
-prefix=/opt/local
+prefix=/usr/local
 
 #
 # Start
 #
 Start()
 {
-   cd /opt/local/var/squid
-   if [ ! -d "/opt/local/var/squid/cache/00" ]; then
-       /opt/local/sbin/squid -s -z
+   cd /usr/local/var/squid
+   if [ ! -d "/usr/local/var/squid/cache/00" ]; then
+       /usr/local/sbin/squid -s -z
    fi
-   /opt/local/sbin/squid -s -N
+   /usr/local/sbin/squid -s -N
 }
 
 #
@@ -25,9 +25,9 @@ Start()
 #
 Stop()
 {
-   cd /opt/local/var/squid
-   /opt/local/sbin/squid -k shutdown
-   while /opt/local/sbin/squid -k check; do
+   cd /usr/local/var/squid
+   /usr/local/sbin/squid -k shutdown
+   while /usr/local/sbin/squid -k check; do
        sleep 1
    done
 }

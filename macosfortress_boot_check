@@ -3,32 +3,31 @@
 # macosfortress_boot_check -- check to make sure that all desired services are running
 
 # commands
-SUDO=/usr/bin/sudo
-LAUNCHCTL=/bin/launchctl
-PORT=/opt/local/bin/port
-PFCTL=/sbin/pfctl
-HEAD=/usr/bin/head
-TAIL=/usr/bin/tail
-LSOF=/usr/sbin/lsof
-KILLALL=/usr/bin/killall
+SUDO="/usr/bin/sudo"
+LAUNCHCTL="/bin/launchctl"
+BREW="/usr/local/bin/brew"
+PFCTL="/sbin/pfctl"
+HEAD="/usr/bin/head"
+TAIL="/usr/bin/tail"
+# LSOF="/usr/sbin/lsof"
+KILLALL="/usr/bin/killall"
 
 # pfctl
-if ! [[ `$SUDO $PFCTL -s info | $HEAD -1 | $TAIL -1` =~ "Status: Enabled" ]]; then
-    $SUDO $LAUNCHCTL unload -w /Library/LaunchDaemons/net.openbsd.pf.plist
-    $SUDO $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
+if ! [[ "$(${SUDO} ${PFCTL} -s info | ${HEAD} -1 | ${TAIL} -1)" =~ "Status: Enabled" ]]; then
+	"${SUDO}" "${LAUNCHCTL}" unload -w /Library/LaunchDaemons/net.openbsd.pf.plist
+	"${SUDO}" "${LAUNCHCTL}" load -w /Library/LaunchDaemons/net.openbsd.pf.plist
 fi
 
 # squid
 # make sure there aren't multiple squid jobs running
-if ! [[ `$SUDO $LSOF -i ':3128' | $TAIL -1` && `ps -ef | grep "/opt/local/sbin/squid -s" | grep -v grep | wc -l` -eq 1 ]]; then
-    $SUDO $PORT unload squid3
-    $SUDO $KILLALL 'squid'
-    $SUDO $KILLALL '(squid-1)'
-    $SUDO $PORT load squid3
+if /usr/bin/pgrep squid &>/dev/null; then
+	"${SUDO}" "${BREW}" services stop squid
+	"${SUDO}" "${KILLALL}" 'squid'
+	"${SUDO}" "${KILLALL}" '(squid-1)'
 fi
+"${SUDO}" "${BREW}" services start squid
 
 # privoxy
-if ! [[ `$SUDO $LSOF -i ':8118' | $TAIL -1` ]]; then
-    $SUDO $PORT unload privoxy
-    $SUDO $PORT load privoxy
+if /usr/bin/pgrep privoxy &>/dev/null; then
+	"${SUDO}" "${BREW}" services restart privoxy
 fi
