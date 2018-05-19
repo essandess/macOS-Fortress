@@ -87,7 +87,7 @@ Proxy. It will:
 
 Installation:
 
-sudo sh ./readme-and-install.sh
+./readme-and-install.sh
 
 Notes:
 
@@ -219,7 +219,7 @@ then
     $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy
     $SUDO $MKDIR -p /usr/local/etc/adblock2privoxy/css
     $SUDO $RSYNC -a easylist-pac-privoxy/adblock2privoxy/adblock2privoxy* /usr/local/etc/adblock2privoxy
-    # ensure that macOS /usr/bin/gcc is the C compiler    
+    # ensure that macOS /usr/bin/gcc is the C compiler
     $SUDO -E $SH -c 'export PATH=/usr/bin:$PATH ; export STACK_ROOT=/usr/local/etc/.stack ; ( cd /usr/local/etc/adblock2privoxy/adblock2privoxy ; /usr/local/bin/stack setup --allow-different-user ; /usr/local/bin/stack install --local-bin-path /usr/local/bin --allow-different-user )'
     $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/nginx.conf /usr/local/etc/adblock2privoxy
     $SUDO $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/default.html /usr/local/etc/adblock2privoxy/css
