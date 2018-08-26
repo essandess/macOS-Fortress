@@ -26,6 +26,7 @@ CP=/bin/cp
 RM=/bin/rm
 SH=/bin/sh
 FMT=/usr/bin/fmt
+EGREP=/usr/bin/egrep
 RSYNC=/usr/bin/rsync
 STACK=/usr/local/bin/stack
 ADBLOCK2PRIVOXY=/usr/local/bin/adblock2privoxy
@@ -61,7 +62,7 @@ Proxy. It will:
 	* Prompt you to install Apple's Xcode Command Line Tools and
 	  Macports <https://www.macports.org/> Uses Macports to
 	* Download and install several key utilities and applications
-	  (wget gnupg p7zip squid privoxy nmap)
+	  (wget gnupg2 p7zip squid privoxy nmap)
 	* Configure macOS's PF native firewall (man pfctl, man pf.conf),
 	  squid, and privoxy
 	* Turn on macOS's native Apache webserver to serve the
@@ -161,9 +162,24 @@ fi
 # Proxy settings in /opt/local/etc/macports/macports.conf
 $SUDO $PORT selfupdate
 
-# Install wget, gnupg, 7z, pcre, proxies, perl, and python modules
-$SUDO $PORT uninstall squid && $SUDO $PORT clean --dist squid
-$SUDO $PORT install wget gnupg p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
+# Install wget, gnupg2, 7z, pcre, proxies, perl, and python modules
+$SUDO $PORT uninstall squid gnupg && $SUDO $PORT clean --dist squid gnupg
+$SUDO $PORT install wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
+
+# exit with error if these ports aren't installed
+for P in wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy                                             
+do                                                                            
+    PORT_TEST=`port installed $P | egrep -e "^ *$P.+\(active\)"`
+    if [ "$PORT_TEST" == "" ]         
+    then
+        cat <<PORT_NOT_INSTALLED
+Macports port $P is not installed. Please fix this by hand and
+re-run this script.
+PORT_NOT_INSTALLED
+        exit 1
+    fi
+done                                                                          
+
 $SUDO $PORT select --set python3 python36
 $SUDO $CPAN install
 $SUDO $CPAN -i Data::Validate::IP
@@ -230,7 +246,12 @@ fi
 # squid
 
 #squid.conf
-$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf
+if ! [ -f /opt/local/etc/squid/squid.conf.default ]
+then
+    $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf /opt/local/etc/squid/squid.conf.default
+else
+    $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf
+fi
 $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf.orig
 $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/squid/squid.conf ./squid.conf > /tmp/squid.conf.patch
 $SUDO $PATCH -p5 /opt/local/etc/squid/squid.conf < /tmp/squid.conf.patch
