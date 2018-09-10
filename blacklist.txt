@@ -31,3 +31,21 @@
 127.0.0.1	techcs.in
 127.0.0.1	vagacs.com
 127.0.0.1	webcs.in
+
+# https://guardianapp.com/ios-app-location-report-sep2018.html
+127.0.0.1	api.areametrics.com
+127.0.0.1	in.cuebiq.com
+127.0.0.1	et.intake.factual.com
+127.0.0.1	api.factual.com
+127.0.0.1	api.beaconsinspace.com
+127.0.0.1	api.huq.io
+127.0.0.1	m2m-api.inmarket.com
+127.0.0.1	mobileapi.mobiquitynetworks.com
+127.0.0.1	sdk.revealmobile.com
+127.0.0.1	api.safegraph.com
+127.0.0.1	incoming-data-sense360.s3.amazonaws.com
+127.0.0.1	ios-quinoa-personal-identify-prod.sense360eng.com
+127.0.0.1	ios-quinoa-events-prod.sense360eng.com
+127.0.0.1	ios-quinoa-high-frequency-events-prod.sense360eng.com
+127.0.0.1	v1.blueberry.cloud.databerries.com
+127.0.0.1	pie.wirelessregistry.com
