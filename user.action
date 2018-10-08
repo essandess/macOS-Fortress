@@ -146,12 +146,22 @@ www.example.com/nasty-ads/sponsor.gif
 # is causing the problem or not.
 # 
 { fragile }
-#.forbes.com
+.forbes.com
+.abcya.com
+.att.com
+.forbes.com
+.neimanmarcus.com
+.tiffany.com
 
 # Here are some sites we wish to support, and we will allow their ads
 # through.
 #
 { allow-ads }
+www.thegreatcourses.com
+.kayak.com
+ads1.msn.com/
+.bing.com/travel/jsxc\.vjs\?
+.onecause.com
 #.sourceforge.net
 #.slashdot.org
 #.osdn.net

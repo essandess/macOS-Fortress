@@ -1,5 +1,5 @@
 #############################################################################
-# $Id: match-all.action,v 1.3 2010/03/27 18:48:38 fabiankeil Exp $
+# $Id: match-all.action,v 1.4 2016/03/27 16:54:05 fabiankeil Exp $
 #
 # This file contains the actions that are applied to all requests and
 # may be overruled later on by other actions files. Less experienced
@@ -30,8 +30,10 @@
 +set-image-blocker{pattern} \
 }
 / # Match all URLs
+# User-Agent
+# See http://www.christianschenk.org/blog/enhancing-your-privacy-using-squid-and-privoxy/
 { \
 +hide-referrer{conditional-forge} \
-+hide-user-agent{Mozilla/5.0 (iPad; CPU OS 6_1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B141 Safari/8536.25} \
++hide-user-agent{Mozilla/5.0 (iPad; CPU OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1} \
 }
 / # Match all URLs

@@ -246,13 +246,13 @@ fi
 # squid
 
 #squid.conf
-if ! [ -f /opt/local/etc/squid/squid.conf.default ]
+if ! [ -f /opt/local/etc/squid/squid.conf.documented ]
 then
-    $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf /opt/local/etc/squid/squid.conf.default
+    $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf /opt/local/etc/squid/squid.conf.documented
 else
-    $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf
+    $SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.documented /opt/local/etc/squid/squid.conf
 fi
-$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.default /opt/local/etc/squid/squid.conf.orig
+$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/squid/squid.conf.documented /opt/local/etc/squid/squid.conf.orig
 $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/squid/squid.conf ./squid.conf > /tmp/squid.conf.patch
 $SUDO $PATCH -p5 /opt/local/etc/squid/squid.conf < /tmp/squid.conf.patch
 $RM /tmp/squid.conf.patch
@@ -267,21 +267,24 @@ fi
 # privoxy
 
 #config
-$SUDO $INSTALL -m 640 /opt/local/etc/privoxy/config /opt/local/etc/privoxy/config.orig
+$SUDO $INSTALL -m 640 -o privoxy -g privoxy -B .orig /opt/local/etc/privoxy/config /opt/local/etc/privoxy/config.orig
 $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/config ./config > /tmp/config.patch
 $SUDO $PATCH -p5 /opt/local/etc/privoxy/config < /tmp/config.patch
+$SUDO $CHOWN privoxy:privoxy /opt/local/etc/privoxy/config
 $RM /tmp/config.patch
 
 #match-all.action
-$SUDO $INSTALL -m 640 -B .orig /opt/local/etc/privoxy/match-all.action /opt/local/etc/privoxy/match-all.action.orig
+$SUDO $INSTALL -m 640 -o privoxy -g privoxy -B .orig /opt/local/etc/privoxy/match-all.action /opt/local/etc/privoxy/match-all.action.orig
 $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/match-all.action ./match-all.action > /tmp/match-all.action.patch
 $SUDO $PATCH -p5 /opt/local/etc/privoxy/match-all.action < /tmp/match-all.action.patch
+$SUDO $CHOWN privoxy:privoxy /opt/local/etc/privoxy/match-all.action
 $RM /tmp/match-all.action.patch
 
 #user.action
-$SUDO $INSTALL -m 644 -B .orig /opt/local/etc/privoxy/user.action /opt/local/etc/privoxy/user.action.orig
+$SUDO $INSTALL -m 644 -o privoxy -g privoxy -B .orig /opt/local/etc/privoxy/user.action /opt/local/etc/privoxy/user.action.orig
 $DIFF -NaurdwB -I '^ *#.*' /opt/local/etc/privoxy/user.action ./user.action > /tmp/user.action.patch
 $SUDO $PATCH -p5 /opt/local/etc/privoxy/user.action < /tmp/user.action.patch
+$SUDO $CHOWN privoxy:privoxy /opt/local/etc/privoxy/user.action
 $RM /tmp/user.action.patch
 
 $SUDO $BASH -c '( cd /opt/local/etc/privoxy ; /usr/sbin/chown privoxy:privoxy config* *.action *.filter )'
