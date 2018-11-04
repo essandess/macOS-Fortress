@@ -1800,7 +1800,7 @@ connection-sharing 0
 #
 #      socket-timeout 300
 #
-socket-timeout 6
+socket-timeout 60
 #
 #  6.9. max-client-connections
 #  ============================
