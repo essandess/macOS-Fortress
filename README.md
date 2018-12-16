@@ -61,13 +61,13 @@ snort+BASE Overview | snort+BASE Events
 ```
 git clone --recurse https://github.com/essandess/macOS-Fortress.git
 cd macOS-Fortress
-sudo sh ./readme-and-install.sh
+sudo -E sh -x ./readme-and-install.sh
 ```
 
 ## Disabling
 
 ```
-sudo sh ./disable.sh
+sudo sh -x ./disable.sh
 ```
 
 ## Notes
