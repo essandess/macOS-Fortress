@@ -199,7 +199,7 @@ GPGID
 $ECHO 'To delete expited keys, see http://superuser.com/questions/594116/clean-up-my-gnupg-keyring/594220#comment730593_594220'
 $ECHO 'These commands delete expired GPG keys:'
 $CAT <<DELETE_EXPIRED_GPG_KEYS
-$SUDO -E $GPG --homedir /var/root/.gnupg --list-keys | $AWK '/^pub.* \[expired\: / {id=$2; sub(/^.*\//, "", id); print id}' | $FMT -w 999 | $SED 's/^/gpg --delete-keys /;'
+$SUDO -E $GPG --homedir /var/root/.gnupg --list-keys | $AWK 'c{id=$1; print id;c=0}/^pub.* \[expired\: /{c=1}' | $FMT -w 999 | $SED 's/^/gpg --delete-keys /;'
 $SUDO -E $GPG --homedir /var/root/.gnupg --delete-keys KeyIDs ...
 DELETE_EXPIRED_GPG_KEYS
 
