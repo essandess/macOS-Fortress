@@ -165,10 +165,10 @@ $SUDO -E $PORT selfupdate
 
 # Install wget, gnupg2, 7z, pcre, proxies, perl, and python modules
 $SUDO -E $PORT uninstall squid gnupg && $SUDO $PORT clean --dist squid gnupg
-$SUDO -E $PORT install wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy
+$SUDO -E $PORT install wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy
 
 # exit with error if these ports aren't installed
-for P in wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python36 py36-scikit-learn py36-matplotlib py36-numpy                                             
+for P in wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy                                             
 do                                                                            
     PORT_TEST=`port installed $P | egrep -e "^ *$P.+\(active\)"`
     if [ "$PORT_TEST" == "" ]         
@@ -181,7 +181,7 @@ PORT_NOT_INSTALLED
     fi
 done                                                                          
 
-$SUDO -E $PORT select --set python3 python36
+$SUDO -E $PORT select --set python3 python37
 $SUDO -E $CPAN install
 $SUDO -E $CPAN -i Data::Validate::IP
 $SUDO -E $CPAN -i Data::Validate::Domain
