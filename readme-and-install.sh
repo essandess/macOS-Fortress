@@ -170,13 +170,13 @@ $SUDO -E $PORT selfupdate
 
 # Install wget, gnupg2, 7z, pcre, proxies, perl, and python modules
 $SUDO -E $PORT uninstall squid gnupg && $SUDO $PORT clean --dist squid gnupg
-$SUDO -E $PORT install wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy
+$SUDO -E $PORT -pN install wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy clamav clamav-server fswatch pcregrep
 
 # exit with error if these ports aren't installed
-for P in wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy                                             
-do                                                                            
+for P in wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy clamav clamav-server fswatch pcregrep
+do
     PORT_TEST=`port installed $P | egrep -e "^ *$P.+\(active\)"`
-    if [ "$PORT_TEST" == "" ]         
+    if [ "$PORT_TEST" == "" ]
     then
         cat <<PORT_NOT_INSTALLED
 Macports port $P is not installed. Please fix this by hand and
@@ -184,7 +184,7 @@ re-run this script.
 PORT_NOT_INSTALLED
         exit 1
     fi
-done                                                                          
+done
 
 $SUDO -E $PORT select --set python3 python37
 $SUDO -E $CPAN install
