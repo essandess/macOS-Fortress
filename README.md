@@ -25,6 +25,7 @@ daemon [org.macports.ClamdScanOnDemand.plist](../../../macOS-clamAV/blob/master/
 * See [macOS-clamAV/README.md](../../../macOS-clamAV/blob/master/README.md) for details on how to grant Full Disk Access to 
 the clamav scanning engine for files protected by Mojave TCC.
 
+## Installation
 The install script [readme-and-install.sh](readme-and-install.sh) installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
 * Prompt you to install Apple's Xcode Command Line Tools and [Macports](https://www.macports.org/)
