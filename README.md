@@ -26,6 +26,14 @@ daemon [org.macports.ClamdScanOnDemand.plist](../../../macOS-clamAV/blob/master/
 the clamav scanning engine for files protected by Mojave TCC.
 
 ## Installation
+
+SSH:
+> `git clone --recurse-submodules git@github.com:essandess/macOS-Fortress.git`
+
+HTTPS:
+> `git clone --recurse-submodules https://github.com/essandess/macOS-Fortress.git`
+
+
 The install script [readme-and-install.sh](readme-and-install.sh) installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
 * Prompt you to install Apple's Xcode Command Line Tools and [Macports](https://www.macports.org/)
