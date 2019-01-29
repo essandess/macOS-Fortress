@@ -1,7 +1,7 @@
 macOS-Fortress
 ===========
 
-# macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy for Trackers, Attackers, Malware, Adware, and Spammers
+# macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy for Trackers, Attackers, Malware, Adware, and Spammers; with On-Demand and On-Access Anti-Virus Scanning
 
 Kernel-level, OS-level, and client-level security for macOS. Built to address a steady stream of attacks visible on snort and server logs, as well as blocks ads, malicious scripts, and conceal information used to track you around the web. After this package was installed, snort and other detections have fallen to a fraction with a few simple blocking actions.  This setup is a lot more capable and effective than using a simple adblocking browser add-on. There's a world of difference between ad-filled web pages with and without a filtering proxy server. It's also saved me from inadvertantly clicking on phishing links.
 
@@ -13,6 +13,18 @@ Kernel-level, OS-level, and client-level security for macOS. Built to address a 
 * [EasyList](https://easylist.to/index.html) Tracker and Adblock Rules to Proxy Auto Configuration (PAC) [proxy.pac](https://raw.githubusercontent.com/essandess/easylist-pac-privoxy/master/proxy.pac) file and [Privoxy](http://www.privoxy.org) Actions and Filters
 * Uses [easylist-pac-privoxy](../../../easylist-pac-privoxy) and [adblock2privoxy](../../../adblock2privoxy) to easily incorporate multiple blocking rulesets into both PAC and Privoxy formats, including [easyprivacy.txt](https://easylist.to/easylist/easyprivacy.txt), [easylist.txt](https://easylist.to/easylist/easylist.txt), [fanboy-annoyance.txt](https://easylist.to/easylist/fanboy-annoyance.txt), [fanboy-social.txt](https://easylist.to/easylist/fanboy-social.txt), [antiadblockfilters.txt](https://easylist-downloads.adblockplus.org/antiadblockfilters.txt), [malwaredomains_full.txt](https://easylist-downloads.adblockplus.org/malwaredomains_full.txt), and the anti-spamware list [adblock-list.txt](https://raw.githubusercontent.com/Dawsey21/Lists/master/adblock-list.txt).
 
+## Anti-Virus features
+* Configures [clamAV](http://www.clamav.net) for macOS with regular on-demand scans and on-access scanning of user `Downloads` 
+and `Desktop` directories.
+* On-Demand scanning is controlled with the launchd daemon
+[org.macports.clamdscan.plist](../../../macOS-clamAV/blob/master/org.macports.clamdscan.plist).
+* On-Access scanning via [fswatch](https://github.com/emcrisostomo/fswatch) is controlled with the Macports daemon script 
+[ClamdScanOnAccess.wrapper](../../../macOS-clamAV/blob/master/ClamdScanOnAccess.wrapper), itself invoked using the launchd 
+daemon [org.macports.ClamdScanOnDemand.plist](../../../macOS-clamAV/blob/master/org.macports.ClamdScanOnDemand.plist). The 
+`Downloads` and `Desktop` directories of all active users are watched by default.
+* See [macOS-clamAV/README.md](../../../macOS-clamAV/blob/master/README.md) for details on how to grant Full Disk Access to 
+the clamav scanning engine for files protected by Mojave TCC.
+
 The install script [readme-and-install.sh](readme-and-install.sh) installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
 * Prompt you to install Apple's Xcode Command Line Tools and [Macports](https://www.macports.org/)
@@ -22,6 +34,8 @@ Proxy. It will:
 * Networking on the local computer can be set up to use this Automatic Proxy Configuration without breaking App Store or other updates (see squid.conf)
 * Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../../../macos-openvpn-server)
 * Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and [EasyList](https://easylist.to) (com.github.essandess.easylist-pac.plist, com.github.essandess.adblock2privoxy.plist)
+* Install On-Demand and On-Access Anti-Virus scanning using [clamAV](http://www.clamav.net); both scheduled full volume scans 
+and on-access scans of all user `Downloads` and `Desktop` directories are performed
 * Installs a user launch daemon that deletes flash cookies not related to Adobe Flash Player settings every half-hour  (http://goo.gl/k4BxuH)
 * After installation the connection between clients and the internet looks this this:
 
