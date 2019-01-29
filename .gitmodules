@@ -5,3 +5,6 @@
 	path = easylist-pac-privoxy
 	url = git@github.com:essandess/easylist-pac-privoxy.git
 	branch = master
+[submodule "macOS-clamAV"]
+	path = macOS-clamAV
+	url = git@github.com:essandess/macOS-clamAV.git

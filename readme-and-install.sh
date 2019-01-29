@@ -2,6 +2,7 @@
 
 # macOS Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
+# with On-Demand and On-Access Anti-Virus Scanning
 
 # commands
 SUDO=/usr/bin/sudo
@@ -56,9 +57,10 @@ This package uses these features:
 	  dshield.org’s top-20
 	* Host blocks updated about twice a day from hphosts.net
 	* Special proxy.pac host blacklisting from hostsfile.org
+        * On-Demand and On-Access Anti-Virus
 
-This install script installs and configures an macOS Firewall and Privatizing
-Proxy. It will:
+This install script installs and configures a macOS Firewall and Privatizing
+Proxy, and macOS On-Demand and On-Access Anti-Virus. It will:
 
 	* Prompt you to install Apple's Xcode Command Line Tools and
 	  Macports <https://www.macports.org/> Uses Macports to
@@ -79,6 +81,9 @@ Proxy. It will:
 	  dshield.org (net.dshield.block.plist), hosts-file.net
 	  (net.hphosts.hosts.plist), and EasyList
 	  (com.github.essandess.easylist-pac.plist)
+        * On-Demand and On-Access Anti-Virus using clamAV; both scheduled
+          full volume scans and on-access scans of all user Downloads and
+          Desktop directories are performed
 	* Installs a user launch daemon that deletes flash cookies not
           related to Adobe Flash Player settings every half-hour
           <http://goo.gl/k4BxuH>
@@ -320,7 +325,20 @@ $SUDO -E $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./privoxy_restart /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./easylist-pac-privoxy/easylist_pac.py /usr/local/bin
 
-# daemons
+# macOS-clamAV
+$SUDO -E $INSTALL -m 644 -b -B .orig ./macOS-clamAV/clamd.conf /opt/local/etc
+$SUDO -E $INSTALL -m 644 -b -B .orig ./macOS-clamAV/freshclam.conf /opt/local/etc
+$SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.clamdscan.plist /Library/LaunchDaemons
+$SUDO $MKDIR -p /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
+$SUDO -E $INSTALL -m 755 ./macOS-clamAV/ClamdScanOnAccess.wrapper /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
+$SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
+$SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /Library/LaunchDaemons
+$SUDO $MKDIR /opt/local/share/clamav
+$SUDO $CHOWN -R clamav:clamav /opt/local/share/clamav
+$SUDO $MKDIR /opt/Quarantine
+$SUDO -u clamav /opt/local/bin/freshclam
+
+# launchd daemons
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.emergingthreats.blockips.plist
@@ -330,6 +348,12 @@ $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.easylist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist
+
+# macOS-clamAV
+$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.clamd.plist
+$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.freshclam.plist
+$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.clamdscan.plist
+$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.ClamdScanOnAccess.plist
 
 $LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
 
