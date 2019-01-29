@@ -17,7 +17,8 @@ ECHO=/bin/echo
 $CAT <<HELPSTRING
 macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy
 for Trackers, Attackers, Malware, Adware, and Spammers
-Kernel-level, OS-level, and client-level security for macOS.
+Kernel-level, OS-level, and client-level security for macOS,
+with On-Demand and On-Access Anti-Virus Scanning.
 
 This disable script will unload all launch daemons, disable
 the pf firewall, and list all insalled files WITHOUT removing them.
@@ -41,6 +42,10 @@ for FNAME in \
 	com.github.essandess.adblock2privoxy.plist \
 	com.github.essandess.adblock2privoxy.nginx.plist \
 	org.squid-cache.squid-rotate.plist \
+        org.macports.clamd.plist \
+        org.macports.freshclam.plist \
+        org.macports.clamdscan.plist \
+        org.macports.ClamdScanOnAccess.plist \
 	; do
 	launchctl_unload
 done
@@ -79,6 +84,10 @@ for FNAME in \
 	$LAUNCHDAEMONS/com.github.essandess.adblock2privoxy.plist \
 	$LAUNCHDAEMONS/com.github.essandess.adblock2privoxy.nginx.plist \
 	$LAUNCHDAEMONS/org.squid-cache.squid-rotate.plist \
+        $LAUNCHDAEMONS/org.macports.clamd.plist \
+        $LAUNCHDAEMONS/org.macports.freshclam.plist \
+        $LAUNCHDAEMONS/org.macports.clamdscan.plist \
+        $LAUNCHDAEMONS/org.macports.ClamdScanOnAccess.plist \
 	$HOME/Library/LaunchAgents/org.opensource.flashcookiedelete.plist \
 	/usr/local/etc/blockips.conf \
 	/usr/local/etc/whitelist.txt \
