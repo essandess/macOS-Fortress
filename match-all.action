@@ -34,6 +34,6 @@
 # See http://www.christianschenk.org/blog/enhancing-your-privacy-using-squid-and-privoxy/
 { \
 +hide-referrer{conditional-forge} \
-+hide-user-agent{Mozilla/5.0 (iPad; CPU OS 12_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1} \
++hide-user-agent{Mozilla/5.0 (iPad; CPU OS 12_1_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Mobile/15E148 Safari/604.1} \
 }
 / # Match all URLs

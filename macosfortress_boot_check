@@ -22,8 +22,9 @@ fi
 # make sure there aren't multiple squid jobs running
 if ! [[ `$SUDO $LSOF -i ':3128' | $TAIL -1` && `ps -ef | grep "/opt/local/sbin/squid -s" | grep -v grep | wc -l` -eq 1 ]]; then
     $SUDO $PORT unload squid3
-    $SUDO $KILLALL 'squid'
     $SUDO $KILLALL '(squid-1)'
+    $SUDO $KILLALL 'squid'
+    /bin/sleep 5
     $SUDO $PORT load squid3
 fi
 

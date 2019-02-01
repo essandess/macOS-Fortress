@@ -169,11 +169,11 @@ fi
 $SUDO -E $PORT selfupdate
 
 # Install wget, gnupg2, 7z, pcre, proxies, perl, and python modules
-$SUDO -E $PORT uninstall squid gnupg && $SUDO $PORT clean --dist squid gnupg
-$SUDO -E $PORT -pN install wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy clamav clamav-server fswatch pcregrep
+$SUDO -E $PORT uninstall squid squid3 gnupg && $SUDO $PORT clean --dist squid squid3 gnupg
+$SUDO -E $PORT -pN install wget gnupg2 p7zip pcre squid4 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy clamav clamav-server fswatch pcregrep
 
 # exit with error if these ports aren't installed
-for P in wget gnupg2 p7zip pcre squid3 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy clamav clamav-server fswatch pcregrep
+for P in wget gnupg2 p7zip pcre squid4 privoxy nginx nmap python37 py37-scikit-learn py37-matplotlib py37-numpy clamav clamav-server fswatch pcregrep
 do
     PORT_TEST=`port installed $P | egrep -e "^ *$P.+\(active\)"`
     if [ "$PORT_TEST" == "" ]

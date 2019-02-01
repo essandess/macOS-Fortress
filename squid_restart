@@ -5,4 +5,5 @@
 sudo launchctl unload -w /Library/LaunchDaemons/org.macports.Squid.plist
 sudo killall '(squid-1)'
 sudo killall squid
+sleep 5
 sudo launchctl load -w /Library/LaunchDaemons/org.macports.Squid.plist
