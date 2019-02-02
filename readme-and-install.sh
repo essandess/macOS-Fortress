@@ -270,6 +270,8 @@ if ! [ -d /opt/local/var/squid/logs ]; then
     $SUDO -E $CHOWN -R squid:squid /opt/local/var/squid
 fi
 
+$SUDO -E /opt/local/sbin/squid -s -z --foreground
+
 # privoxy
 
 #config
