@@ -1,10 +1,10 @@
 [submodule "privoxy-adblock"]
 	path = deprecated/privoxy-adblock
-	url = https://github.com/essandess/privoxy-adblock
+	url = ../privoxy-adblock.git
 [submodule "easylist-pac-privoxy"]
 	path = easylist-pac-privoxy
-	url = git@github.com:essandess/easylist-pac-privoxy.git
+	url = ../easylist-pac-privoxy.git
 	branch = master
 [submodule "macOS-clamAV"]
 	path = macOS-clamAV
-	url = git@github.com:essandess/macOS-clamAV.git
+	url = ../macOS-clamAV.git
