@@ -359,7 +359,7 @@ $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.ClamdScanOnAcces
 
 $LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
 
-$SUDO -E $PORT load squid
+$SUDO -E $PORT load squid4
 $SUDO -E $PORT load privoxy
 
 
