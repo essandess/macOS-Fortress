@@ -49,3 +49,9 @@
 127.0.0.1	ios-quinoa-high-frequency-events-prod.sense360eng.com
 127.0.0.1	v1.blueberry.cloud.databerries.com
 127.0.0.1	pie.wirelessregistry.com
+
+# Blocking this domain breaks CNN app live streaming -- send to nginx blackhole
+# To diagnose:
+# tcpdump -e -ttt -i en0 -w my-iPad-cnn-3128.pcap src my-iPad or dst my-iPad
+# grep -a 'URL: <a' < my-iPad-cnn-3128.pcap | perl -lne 's/^.*URL: <a href="https?:\/\/([-\w.]+)\/?.*?">.*$/\1/; print;' | uniq
+127.0.0.1:8119	bea4.v.fwmrm.net
