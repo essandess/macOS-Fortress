@@ -32,7 +32,7 @@ LAUNCHDAEMONS=/Library/LaunchDaemons
 
 launchctl_unload () { if [ -f $LAUNCHDAEMONS/$PLIST ]; then $SUDO $LAUNCHCTL unload -w $LAUNCHDAEMONS/$PLIST; fi; }
 
-for FNAME in \
+for PLIST in \
 	net.openbsd.pf.plist \
 	net.openbsd.pf.brutexpire.plist \
 	net.emergingthreats.blockips.plist \

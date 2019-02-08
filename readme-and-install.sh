@@ -193,7 +193,7 @@ $SUDO -E $CPAN -i Data::Validate::Domain
 # Used to verify downloads
 $SUDO -E $CURL -O https://secure.dshield.org/PGPKEYS.txt
 $SUDO -E $GPG --homedir /var/root/.gnupg --import PGPKEYS.txt
-$SUDO -E $GPG --homedir /var/root/.gnupg --recv-keys C1E94509 608D9001
+$SUDO -E $GPG --homedir /var/root/.gnupg --recv-keys 221084F4 608D9001
 $SUDO -E $GPG --homedir /var/root/.gnupg --list-keys
 $CAT <<'GPGID'
 Keep your gpg keychain up to date by checking the keys IDs with these commands:
