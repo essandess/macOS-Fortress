@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>net.hphosts.hosts.plist</string>
+	<string>net.hphosts.hosts</string>
 	<key>Program</key>
 	<string>/bin/bash</string>
 	<key>ProgramArguments</key>
@@ -16,8 +16,6 @@
         <true/>
         <key>StartInterval</key>
 	<integer>86850</integer>
-	<key>ServiceDescription</key>
-	<string>hpHosts.org hosts file update</string>
 	<key>StandardErrorPath</key>
 	<string>/var/log/system.log</string>
 	<key>StandardOutPath</key>

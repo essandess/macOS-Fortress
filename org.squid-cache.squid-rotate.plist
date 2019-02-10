@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>org.squid-cache.squid-rotate.plist</string>
+	<string>org.squid-cache.squid-rotate</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/bin/bash</string>
@@ -15,7 +15,5 @@
 		<key>Hour</key>
 		<integer>0</integer>
 	</dict>
-	<key>ServiceDescription</key>
-	<string>Rotate Squid Logs Every Day at Midnight</string>
 </dict>
 </plist>

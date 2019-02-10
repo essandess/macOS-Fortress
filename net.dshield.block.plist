@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>net.dshield.block.plist</string>
+	<string>net.dshield.block</string>
 	<key>Program</key>
 	<string>/bin/bash</string>
 	<key>ProgramArguments</key>
@@ -16,8 +16,6 @@
 	<true/>
 	<key>StartInterval</key>
 	<integer>11250</integer>
-	<key>ServiceDescription</key>
-	<string>dshield.org top 20 block list</string>
 	<key>StandardErrorPath</key>
 	<string>/var/log/pf.log</string>
 	<key>StandardOutPath</key>

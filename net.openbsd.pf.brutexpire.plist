@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>net.openbsd.pf.brutexpire.plist</string>
+	<string>net.openbsd.pf.brutexpire</string>
 	<key>Program</key>
 	<string>/sbin/pfctl</string>
 	<key>ProgramArguments</key>
@@ -19,8 +19,6 @@
         <true/>
         <key>StartInterval</key>
         <integer>86400</integer>
-	<key>ServiceDescription</key>
-	<string>OpenBSD Packet Filter bruteforce table expiration</string>
 	<key>StandardErrorPath</key>
 	<string>/var/log/pf.log</string>
 	<key>StandardOutPath</key>

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>Label</key>
-	<string>net.emergingthreats.blockips.plist</string>
+	<string>net.emergingthreats.blockips</string>
 	<key>Program</key>
 	<string>/bin/bash</string>
 	<key>ProgramArguments</key>
@@ -16,8 +16,6 @@
 	<true/>
 	<key>StartInterval</key>
 	<integer>47250</integer>
-	<key>ServiceDescription</key>
-	<string>Emerging Threats PF Update</string>
 	<key>StandardErrorPath</key>
 	<string>/var/log/pf.log</string>
 	<key>StandardOutPath</key>
