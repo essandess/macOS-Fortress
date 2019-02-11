@@ -33,6 +33,97 @@ cd macOS-Fortress
 sudo -E sh -x ./readme-and-install.sh
 ```
 
+## Check and troubleshoot setup
+
+> `sudo sh macosfortress_setup_check.sh`
+
+Working output:
+```
+Checking macOS-Fortress installed items (run as sudo)…
+
+Checking launchd.plist files…
+[✅] /Library/LaunchDaemons/net.openbsd.pf.plist exists
+[✅] /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist exists
+[✅] /Library/LaunchDaemons/net.emergingthreats.blockips.plist exists
+[✅] /Library/LaunchDaemons/net.dshield.block.plist exists
+[✅] /Library/LaunchDaemons/net.hphosts.hosts.plist exists
+[✅] /Library/LaunchDaemons/com.github.essandess.easylist-pac.plist exists
+[✅] /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist exists
+[✅] /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist exists
+[✅] /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist exists
+[✅] /Library/LaunchDaemons/org.macports.Squid.plist exists
+[✅] /Library/LaunchDaemons/org.macports.Privoxy.plist exists
+[✅] /Library/LaunchDaemons/org.macports.clamd.plist exists
+[✅] /Library/LaunchDaemons/org.macports.freshclam.plist exists
+[✅] /Library/LaunchDaemons/org.macports.clamdscan.plist exists
+[✅] /Library/LaunchDaemons/org.macports.ClamdScanOnAccess.plist exists
+
+Checking launchd.plist's. These should all be installed with return
+code 0 (2d column of `sudo launchctl list`)…
+[✅]	-	0	com.github.essandess.easylist-pac
+[✅]	-	0	net.dshield.block
+[✅]	-	0	org.squid-cache.squid-rotate
+[✅]	91695	0	org.macports.ClamdScanOnAccess
+[✅]	-	0	org.macports.freshclam
+[✅]	-	0	net.openbsd.pf
+[✅]	-	0	com.github.essandess.adblock2privoxy
+[✅]	35403	0	org.macports.clamd
+[✅]	-	0	org.macports.clamdscan
+[✅]	-	0	net.openbsd.pf.brutexpire
+[✅]	-	0	net.emergingthreats.blockips
+[✅]	37069	0	org.macports.Squid
+[✅]	36183	0	org.macports.Privoxy
+[✅]	5578	0	com.github.essandess.adblock2privoxy.nginx
+[✅]	-	0	net.hphosts.hosts
+
+Checking PF files…
+[✅] /etc/pf.conf exists
+[✅] /usr/local/etc/blockips.conf exists
+[✅] /usr/local/etc/emerging-Block-IPs.txt exists
+[✅] /usr/local/etc/compromised-ips.txt exists
+[✅] /usr/local/etc/dshield_block_ip.txt exists
+[✅] /usr/local/etc/block.txt exists
+[✅] /usr/local/etc/block.txt.asc exists
+
+Checking PF…
+[✅] PF is enabled and running
+
+Checking hphosts files…
+[✅] /etc/hosts-hphosts exists
+[✅] /usr/local/etc/hosts.zip exists
+[✅] /usr/local/etc/hphosts-partial.asp exists
+[✅] /usr/local/etc/whitelist.txt exists
+[✅] /usr/local/etc/blacklist.txt exists
+
+Checking /etc/hosts-hphosts creation…
+[✅] /etc/hosts-hphosts exists
+
+Checking proxy PAC and proxy chain files…
+[✅] /Library/WebServer/Documents/proxy.pac.orig exists
+[✅] /Library/WebServer/Documents/proxy.pac exists
+[✅] /usr/local/bin/easylist_pac.py exists
+[✅] /usr/local/bin/adblock2privoxy exists
+[✅] /usr/local/etc/proxy.pac exists
+[✅] /usr/local/etc/adblock2privoxy/nginx.conf exists
+[✅] /usr/local/etc/adblock2privoxy/css/default.html exists
+[✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.action exists
+[✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.filter exists
+[✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.system.action exists
+[✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.system.filter exists
+[✅] /opt/local/etc/squid/squid.conf exists
+[✅] /opt/local/var/squid/logs/cache.log exists
+[✅] /opt/local/etc/privoxy/config exists
+[✅] /opt/local/var/log/privoxy/logfile exists
+
+Checking proxy status…
+[✅] Squid is running properly
+[✅] Privoxy is running properly
+[✅] Privoxy config http://p.p/ via http://localhost:3128 is running properly
+[✅] nginx is running properly
+[✅] Web server for http://localhost/proxy.pac is running properly
+[✅] Blackhole server for http://localhost:8119/ is running properly
+```
+
 ## Disabling
 
 ```
