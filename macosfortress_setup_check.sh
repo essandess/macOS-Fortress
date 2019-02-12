@@ -278,7 +278,7 @@ EOF
 fi
 
 # proxy.pac on proxy server
-if ! [[ `$CURL -s --head http://${PROXY_PAC_SERVER}/proxy.pac | $HEAD -n 1 | $GREP "HTTP/1.\d [23]\d\d"`  ]]; then
+if [[ `$CURL -s --head http://${PROXY_PAC_SERVER}/proxy.pac | $HEAD -n 1 | $GREP "HTTP/1.\d [23]\d\d"`  ]]; then
     echo "[✅] Web server for http://${PROXY_PAC_SERVER}/proxy.pac is running properly"
 else
     $CAT <<EOF
@@ -289,7 +289,7 @@ EOF
 fi
 
 # blackhole on proxy server
-if ! [[ `$CURL -s --head http://${PROXY_SERVER}:8119/ | $HEAD -n 1 | $GREP "HTTP/1.[01] [23]\d\d"` ]]; then
+if [[ `$CURL -s --head http://${PROXY_SERVER}:8119/ | $HEAD -n 1 | $GREP "HTTP/1.[01] [23]\d\d"` ]]; then
     echo "[✅] Blackhole server for http://${PROXY_SERVER}:8119/ is running properly"
 else
     $CAT <<EOF
