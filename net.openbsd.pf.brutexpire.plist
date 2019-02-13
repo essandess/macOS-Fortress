@@ -16,7 +16,7 @@
 		<string>604800</string>
 	</array>
         <key>RunAtLoad</key>
-        <true/>
+        <false/>
         <key>StartInterval</key>
         <integer>86400</integer>
 	<key>StandardErrorPath</key>
