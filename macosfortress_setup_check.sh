@@ -278,10 +278,10 @@ EOF
 fi
 
 # proxy.pac on proxy server
-if ! [[ `$CURL -s --head http://${PROXY_PAC_SERVER}/proxy.pac | $HEAD -n 1 | $GREP "HTTP/1.\d [23]\d\d"`  ]]; then
+if [[ `$CURL -s --head http://${PROXY_PAC_SERVER}/proxy.pac | $HEAD -n 1 | $GREP "HTTP/1.\d [23]\d\d"`  ]]; then
     echo "[✅] Web server for http://${PROXY_PAC_SERVER}/proxy.pac is running properly"
 else
-    $CAT <<'EOF'
+    $CAT <<EOF
 [❌] Web server for http://${PROXY_PAC_SERVER}/proxy.pac isn't running properly! Troubleshooting:
 
 sudo apachectl start
@@ -289,13 +289,13 @@ EOF
 fi
 
 # blackhole on proxy server
-if ! [[ `$CURL -s --head http://${PROXY_SERVER}:8119/ | $HEAD -n 1 | $GREP "HTTP/1.[01] [23]\d\d"` ]]; then
+if [[ `$CURL -s --head http://${PROXY_SERVER}:8119/ | $HEAD -n 1 | $GREP "HTTP/1.[01] [23]\d\d"` ]]; then
     echo "[✅] Blackhole server for http://${PROXY_SERVER}:8119/ is running properly"
 else
-    $CAT <<'EOF'
+    $CAT <<EOF
 [❌] Blackhole server for http://${PROXY_SERVER}:8119/ isn't running properly! Troubleshooting:
 
-sudo ps -f `cat /opt/local/var/run/nginx/nginx-adblock2privoxy.pid`
+sudo ps -f \`cat /opt/local/var/run/nginx/nginx-adblock2privoxy.pid\`
 sudo launchctl unload -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 sudo launchctl load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 EOF
