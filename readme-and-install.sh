@@ -347,11 +347,16 @@ $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.emergingthreats.blockips.
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.dshield.block.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.hphosts.hosts.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.easylist-pac.plist
-# kickstart service com.github.essandess.easylist-pac to generate a proxy.pac file for the 1st time
-$SUDO -E $LAUNCHCTL kickstart -k system/com.github.essandess.easylist-pac
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist
+
+# start these services for the 1st time because they use RunAtLoad false
+$SUDO -E $LAUNCHCTL start net.emergingthreats.blockips
+$SUDO -E $LAUNCHCTL start net.dshield.block
+$SUDO -E $LAUNCHCTL start net.hphosts.hosts
+$SUDO -E $LAUNCHCTL start com.github.essandess.easylist-pac
+$SUDO -E $LAUNCHCTL start com.github.essandess.adblock2privoxy
 
 # macOS-clamAV
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.clamd.plist
