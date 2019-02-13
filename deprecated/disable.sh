@@ -80,6 +80,7 @@ for FNAME in \
 	/usr/local/etc/blockips.conf \
 	/usr/local/etc/whitelist.txt \
 	/usr/local/etc/blacklist.txt \
+	/usr/local/bin/macosfortress_setup_check.sh \
 	/usr/local/bin/osxfortress_boot_check \
 	/usr/local/bin/pf_restart \
 	/usr/local/bin/squid_restart \
