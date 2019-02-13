@@ -118,7 +118,7 @@ Notes:
 	  the squid proxy to use the updates.
 	* Sometimes pf and privoxy do not launch at boot, in spite of
 	  the use of the use of their launch daemons.  Fix this by
-	  hand after boot with the scripts macosfortress_boot_check, or
+	  hand after boot with the scripts macosfortress_setup_check.sh, or
 	  individually using pf_restart, privoxy_restart, and
 	  squid_restart. And please post a solution if you find one.
 	* All open source updates are done using the 'wget -N' option
@@ -321,7 +321,7 @@ $SUDO -E $INSTALL -m 644 ./whitelist.txt /usr/local/etc
 $SUDO -E $INSTALL -m 644 ./blacklist.txt /usr/local/etc
 
 $SUDO -E $INSTALL -m 755 ./pf_attacks /usr/local/bin
-$SUDO -E $INSTALL -m 755 ./macosfortress_boot_check /usr/local/bin
+$SUDO -E $INSTALL -m 755 ./macosfortress_setup_check.sh /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./pf_restart /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./privoxy_restart /usr/local/bin
@@ -379,7 +379,7 @@ fi
 
 
 # check after boot
-# /usr/local/bin/macosfortress_boot_check
+/usr/local/bin/macosfortress_setup_check.sh
 
 
 exit 0
