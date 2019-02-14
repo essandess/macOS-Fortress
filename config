@@ -1941,7 +1941,7 @@ max-client-connections 256
 #      Privoxy will not compress buffered content below a certain
 #      length.
 #
-enable-compression 1
+#enable-compression 1
 #
 #  6.12. compression-level
 #  ========================
@@ -1987,7 +1987,7 @@ enable-compression 1
 #          compression-level 0
 #
 #
-compression-level 9
+#compression-level 9
 #
 #  6.13. client-header-order
 #  ==========================

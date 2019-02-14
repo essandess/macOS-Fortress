@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 # macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
@@ -257,7 +257,7 @@ fi
 if ! [[ `( http_proxy=http://${PROXY_SERVER}:3128; $CURL -s --head http://p.p/ | $HEAD -n 1 | $GREP "HTTP/1.\d [23]\d\d" )` ]]; then
     echo "[✅] Privoxy config http://p.p/ via http://${PROXY_SERVER}:3128 is running properly"
 else
-    $CAT <<'EOF'
+    $CAT <<EOF
 [❌] Privoxy config http://p.p/ via http://${PROXY_SERVER}:3128 isn't running properly! Troubleshooting:
 
 sudo less /opt/local/var/log/privoxy/logfile
