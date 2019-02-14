@@ -120,6 +120,8 @@ Checking proxy status…
 [✅] Privoxy is running properly
 [✅] Privoxy config http://p.p/ via http://localhost:3128 is running properly
 [✅] nginx is running properly
+[✅] PAC /Library/WebServer/Documents/proxy.pac.orig passes Javascript parsing
+[✅] PAC /Library/WebServer/Documents/proxy.pac passes Javascript parsing
 [✅] Web server for http://localhost/proxy.pac is running properly
 [✅] Blackhole server for http://localhost:8119/ is running properly
 ```
