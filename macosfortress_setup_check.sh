@@ -279,16 +279,13 @@ sudo launchctl load -w /Library/LaunchDaemons/com.github.essandess.adblock2privo
 EOF
 fi
 
-# Javascript parsing of proxy.pac
+# Javascript parsing of proxy.pac.orig and proxy.pac
 if [ -x $JSC -a -f $PROXY_PAC_DIRECTORY/proxy.pac.orig ]; then \
     $JSC $PROXY_PAC_DIRECTORY/proxy.pac.orig >/dev/null 2>&1 \
 	&& echo "[✅] PAC $PROXY_PAC_DIRECTORY/proxy.pac.orig passes Javascript parsing" \
 	|| echo "[❌] PAC $PROXY_PAC_DIRECTORY/proxy.pac.orig fails Javascript parsing" ; \
 fi
 if [ -x $JSC -a -f $PROXY_PAC_DIRECTORY/proxy.pac ]; then \
-    $JSC $PROXY_PAC_DIRECTORY/proxy.pac >/dev/null 2>&1 \
-	&& echo "[✅] PAC $PROXY_PAC_DIRECTORY/proxy.pac passes Javascript parsing" \
-	|| echo "[❌] PAC $PROXY_PAC_DIRECTORY/proxy.pac fails Javascript parsing" ; \
     $JSC $PROXY_PAC_DIRECTORY/proxy.pac >/dev/null 2>&1 \
 	&& echo "[✅] PAC $PROXY_PAC_DIRECTORY/proxy.pac passes Javascript parsing" \
 	|| echo "[❌] PAC $PROXY_PAC_DIRECTORY/proxy.pac fails Javascript parsing" ; \
