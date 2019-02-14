@@ -28,6 +28,8 @@ CURL=/usr/bin/curl
 AWK=/usr/bin/awk
 HOSTNAME=/bin/hostname
 
+JSC=/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc
+
 PROXY_PAC_SERVER=localhost
 PROXY_SERVER=localhost
 LAUNCHDAEMONS=/Library/LaunchDaemons
@@ -275,6 +277,21 @@ sudo ps -f `cat /opt/local/var/run/nginx/nginx-adblock2privoxy.pid`
 sudo launchctl unload -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 sudo launchctl load -w /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist
 EOF
+fi
+
+# Javascript parsing of proxy.pac
+if [ -x $JSC -a -f $PROXY_PAC_DIRECTORY/proxy.pac.orig ]; then \
+    $JSC $PROXY_PAC_DIRECTORY/proxy.pac.orig >/dev/null 2>&1 \
+	&& echo "[✅] PAC $PROXY_PAC_DIRECTORY/proxy.pac.orig passes Javascript parsing" \
+	|| echo "[❌] PAC $PROXY_PAC_DIRECTORY/proxy.pac.orig fails Javascript parsing" ; \
+fi
+if [ -x $JSC -a -f $PROXY_PAC_DIRECTORY/proxy.pac ]; then \
+    $JSC $PROXY_PAC_DIRECTORY/proxy.pac >/dev/null 2>&1 \
+	&& echo "[✅] PAC $PROXY_PAC_DIRECTORY/proxy.pac passes Javascript parsing" \
+	|| echo "[❌] PAC $PROXY_PAC_DIRECTORY/proxy.pac fails Javascript parsing" ; \
+    $JSC $PROXY_PAC_DIRECTORY/proxy.pac >/dev/null 2>&1 \
+	&& echo "[✅] PAC $PROXY_PAC_DIRECTORY/proxy.pac passes Javascript parsing" \
+	|| echo "[❌] PAC $PROXY_PAC_DIRECTORY/proxy.pac fails Javascript parsing" ; \
 fi
 
 # proxy.pac on proxy server

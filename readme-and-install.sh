@@ -382,4 +382,14 @@ fi
 /usr/local/bin/macosfortress_setup_check.sh
 
 
+$CAT <<'URL_PATH_INCLUSION'
+To allow URL path blocking capability in HTTPS:
+
+    * Chrome:
+      $ defaults write com.google.Chrome PacHttpsUrlStrippingEnabled -bool false
+
+    * Firefox, about:config:
+      network.proxy.autoconfig_url.include_path : true
+URL_PATH_INCLUSION
+
 exit 0
