@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # macOS-Fortress: Firewall, Blackhole, and Privatizing Proxy
 # for Trackers, Attackers, Malware, Adware, and Spammers
