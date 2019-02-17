@@ -135,7 +135,39 @@ sudo sh -x ./disable.sh
 The disable/uninstall script [disable.sh](disable.sh) will unload all launch daemons, disable the pf firewall, and list all 
 installed files **without** removing them.
 
-## Path stripping/inclusion in `FindProxyForURL`
+## Configuration modifications
+
+In addition to editing the configuration and shell scripts in this repo, these configuration options for the proxy chain and 
+desktop browsers may be of interest.
+
+### Macports updates
+
+Update Macports packages regularly. This command with update the Macports database, update all installed packages, and uninstall all older, inactive versions.
+
+`sudo bash -c 'port selfupdate ; port -puN upgrade outdated ; port uninstall inactive'
+
+### Squid `--enable-http-violations`
+
+This setting allows squid to forge the `User-Agent` with the `request_header_replace` directive in
+[squid.conf](./squid.conf]). In Macports currently, this compile-time configuration must be added to the Macports port file by 
+hand:
+
+```
+sudo port uninstall squid4
+sudo port clean --all squid4
+# add --enable-http-violations to the configure.args line; don't forget the backslash line continuation
+sudo vi `port file squid4`
+sudo port install squid4
+# make sure that the config file /opt/local/etc/squid/squid.conf is correct
+sudo port load squid4
+```
+
+*Warning about Privoxy compression*: Though it's possible to use this approach with Privoxy to `--enable-compression`, 
+compressed HTTP traffic within a VPN tunnel exposes your traffic to the
+CRIME/BEAST/[VORACLE](https://openvpn.net/security-advisory/the-voracle-attack-vulnerability/) attacks and is generally not 
+recommended.
+
+### Browser Path stripping/inclusion in `FindProxyForURL`
 
 Many Easylist rules use URL path information to determine of the request should be blocked or not. Becasue the full URL with 
 its path is necessarily visible to the browser, this information can be passed to the Proxy Autoconfig file, even if the URL 
