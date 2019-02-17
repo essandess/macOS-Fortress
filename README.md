@@ -163,7 +163,7 @@ sudo port load squid4
 ```
 
 *Warning about Privoxy compression*: Though it's possible to use this approach with Privoxy to `--enable-compression`, 
-compressed HTTP traffic within a VPN tunnel exposes your traffic to the
+compressed HTTP traffic within a [VPN tunnel](../../../macos-openvpn-server) exposes your traffic to the
 CRIME/BEAST/[VORACLE](https://openvpn.net/security-advisory/the-voracle-attack-vulnerability/) attacks and is generally not 
 recommended.
 
