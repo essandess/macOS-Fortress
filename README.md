@@ -144,7 +144,7 @@ desktop browsers may be of interest.
 
 Update Macports packages regularly. This command with update the Macports database, update all installed packages, and uninstall all older, inactive versions.
 
-`sudo bash -c 'port selfupdate ; port -puN upgrade outdated ; port uninstall inactive'
+`sudo bash -c 'port selfupdate ; port -puN upgrade outdated ; port uninstall inactive'`
 
 ### Squid `--enable-http-violations`
 
