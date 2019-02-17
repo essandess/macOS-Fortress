@@ -149,7 +149,7 @@ Update Macports packages regularly. This command with update the Macports databa
 ### Squid `--enable-http-violations`
 
 This setting allows squid to forge the `User-Agent` with the `request_header_replace` directive in
-[squid.conf](./squid.conf]). In Macports currently, this compile-time configuration must be added to the Macports port file by 
+[squid.conf](./squid.conf). In Macports currently, this compile-time configuration must be added to the Macports port file by 
 hand:
 
 ```
