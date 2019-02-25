@@ -137,8 +137,51 @@ installed files **without** removing them.
 
 ## Configuration modifications
 
-In addition to editing the configuration and shell scripts in this repo, these configuration options for the proxy chain and 
-desktop browsers may be of interest.
+There are three major, independent, and configurable components to the repo: the PF firewall, the proxy chain, and the
+AV scanner. Here are a few configuration pointers.
+
+### PF firewall
+
+The file [pf.conf](./pf.conf) controls the firewall ruleset and likely must be edited on a specific computer and network, or 
+edited for a VPN server [configuration](../../../macos-openvpn-server/pf.conf).
+
+* The PF firewall can be disabled with the command:
+> `sudo pfctl -d`
+* The variable `int_if` for the internal interface is set to `en0`. This should be changed to the active interface on your 
+computer, which can be determined with the command `ifconfig -a`, or more specificall:
+> `ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active' | egrep -o -m 1 '^[^\t:]+'`
+* The table `<lan_inet>` is set to the standard reserved ranges `{ 10/8, 172.16/12, 192.168/16 }`. This must be changed
+to the CIDR ranges on the specific LAN.
+* Specific services accessible only on the LAN and on the open internet should be selected and set in the appropriate 
+variables. See `/etc/services`.
+* The PF firewall ruleset can be flushed, enabled, and reintialized with the command:
+> `sudo pfctl -Fall && sudo pfctl -ef /etc/pf.conf`
+* See the `pfctl` commands in the script [pf_attacks](./pf_attacks) to determine IP addresses and counts for the various 
+blocked IPs. E.g., the adaptive table `<bruteforce>` is shown using the command:
+> `sudo pfctl -t bruteforce -Ts`
+
+### Proxy chain
+
+There are four components to the proxy chain: a Proxy AutocConfiguration (PAC) file
+[proxy.pac](../../../easylist-pac-privoxy/proxy.pac), a caching `squid` proxy, a non-caching `privoxy` proxy, and an auxiliary  
+`nginx` webserver. The PAC file [proxy.pac](../../../easylist-pac-privoxy/proxy.pac) proxies unblocked web requests to squid 
+on port 3128, and blocked requests to a static nginx page on port 8119. PAC file blocking rules are derived from Easylist 
+rules. The squid proxy is configured in [squid.conf](./squid.conf) to use privoxy as a parent proxy on port 8118. Privoxy is 
+configured in [config](./config) to sent web requests to the internet, and use the auxiliary nginx webserver for CSS-based 
+element hiding on port 8119. Privoxy `.action` and `.filter` files, and nginx `.css` files are created from Easylist rules 
+using the repo [adblock2privoxy](../../../adblock2privoxy).
+
+Each of these proxy configurations will work, with [varying](../../../easylist-pac-privoxy#purpose) blocking capabilities:
+* http://localhost/proxy.pac (PAC file, squid, privoxy, nginx element hiding)
+* http://localhost:3128 (squid, privoxy, nginx element hiding)
+* http://localhost:8118 (privoxy, nginx element hiding)
+
+Browsing to the privoxy configuration page http://p.p/ through any of these proxy configurations is a check on whether the 
+proxy is running and configured correctly.
+
+To provide these services on a firewalled LAN, edit the squid, privoxy, and nginx configuration files
+[squid.conf](./squid.conf), [config](./config), and [nginx.conf](../../../adblock2privoxy//nginx.conf) so that they're 
+available for devices on the LAN, or connecting from a [VPN tunnel](../../../macos-openvpn-server/).
 
 ### Macports updates
 
@@ -147,6 +190,9 @@ Update Macports packages regularly. This command with update the Macports databa
 `sudo bash -c 'port selfupdate ; port -puN upgrade outdated ; port uninstall inactive'`
 
 ### Squid `--enable-http-violations`
+
+In addition to editing the configuration and shell scripts in this repo, these configuration options for the proxy chain and 
+desktop browsers may be of interest.
 
 This setting allows squid to forge the `User-Agent` with the `request_header_replace` directive in
 [squid.conf](./squid.conf). In Macports currently, this compile-time configuration must be added to the Macports port file by 
