@@ -216,21 +216,25 @@ then
     $SUDO -E $APACHECTL start
 else
     # macOS Server for proxy.pac
-    PROXY_PAC_DIRECTORY=/Library/Server/Web/Data/Sites/proxy.mydomainname.private
-    if [ -d $PROXY_PAC_DIRECTORY ]
+    # Assume that Server.app v5.8+'s Profile Manager Apache Web server
+    # has been configured to serve PAC files; see te VirtualHost or AliasMatch
+    # methods at https://github.com/essandess/macOS-Open-Source-Server
+    PROXY_PAC_DIRECTORY=/Library/WebServer/Sites/proxy.mydomain.private
+    if ! [ -d $PROXY_PAC_DIRECTORY ]
     then
         $CAT <<PROXY_PAC_DNS
-Please use Server.app's DNS and Websites services to create the hostname and website
-${PROXY_PAC_DIRECTORY##*/}, edit the configuration files
+Please configure DNS and your Profile Manager Web server to create the hostname
+and website ${PROXY_PAC_DIRECTORY##*/}, edit the configuration files
 
 	`fgrep -l mydomain ./* | tr '\n'  ' '`
 
 to reflect this name, then run this script again.
 PROXY_PAC_DNS
-        exit 1
+        # Don't exit-on-error, but be sure to configure necessary files by hand
+        if false; then exit 1; fi
     fi
-    $SUDO -E $SERVERADMIN stop web
-    $SUDO -E $SERVERADMIN start web
+    $SUDO -E $SERVERADMIN stop devicemgr
+    $SUDO -E $SERVERADMIN start devicemgr
 fi
 $SUDO -E $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY
 $SUDO -E $INSTALL -m 644 ./proxy.pac $PROXY_PAC_DIRECTORY/proxy.pac.orig
@@ -264,7 +268,10 @@ $SUDO -E $PATCH -p5 /opt/local/etc/squid/squid.conf < /tmp/squid.conf.patch
 $RM /tmp/squid.conf.patch
 
 # rotate squid logs
-$SUDO -E $INSTALL -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
+if ! [ -f /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./org.squid-cache.squid-rotate.plist /Library/LaunchDaemons
+fi
 if ! [ -d /opt/local/var/squid/logs ]; then
     $SUDO -E $MKDIR -p -m 644 /opt/local/var/squid/logs
     $SUDO -E $CHOWN -R squid:squid /opt/local/var/squid
@@ -306,14 +313,38 @@ fi
 # install the files
 $SUDO -E $CP /etc/hosts /etc/hosts.orig
 $SUDO -E $INSTALL -b -B .orig ./pf.conf /etc
-$SUDO -E $INSTALL -m 644 ./net.openbsd.pf.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./net.openbsd.pf.brutexpire.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./com.github.essandess.easylist-pac.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
-$SUDO -E $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
+if ! [ -f /Library/LaunchDaemons/net.openbsd.pf.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./net.openbsd.pf.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./net.openbsd.pf.brutexpire.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/net.emergingthreats.blockips.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./net.emergingthreats.blockips.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/net.dshield.block.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./net.dshield.block.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/net.hphosts.hosts.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./net.hphosts.hosts.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/com.github.essandess.easylist-pac.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./com.github.essandess.easylist-pac.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.plist /Library/LaunchDaemons
+fi
+if ! [ -f /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./easylist-pac-privoxy/adblock2privoxy/com.github.essandess.adblock2privoxy.nginx.plist /Library/LaunchDaemons
+fi
 $INSTALL -m 644 ./org.opensource.flashcookiedelete.plist ~/Library/LaunchAgents
 $SUDO -E $MKDIR -p /usr/local/etc
 $SUDO -E $INSTALL -m 644 ./blockips.conf /usr/local/etc
@@ -330,11 +361,17 @@ $SUDO -E $INSTALL -m 755 ./easylist-pac-privoxy/easylist_pac.py /usr/local/bin
 # macOS-clamAV
 $SUDO -E $INSTALL -m 644 -b -B .orig ./macOS-clamAV/clamd.conf /opt/local/etc
 $SUDO -E $INSTALL -m 644 -b -B .orig ./macOS-clamAV/freshclam.conf /opt/local/etc
-$SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.clamdscan.plist /Library/LaunchDaemons
+if ! [ -f /Library/LaunchDaemons/org.macports.clamdscan.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.clamdscan.plist /Library/LaunchDaemons
+fi
 $SUDO $MKDIR -p /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
 $SUDO -E $INSTALL -m 755 ./macOS-clamAV/ClamdScanOnAccess.wrapper /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
 $SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
-$SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /Library/LaunchDaemons
+if ! [ -f /Library/LaunchDaemons/org.macports.ClamdScanOnAccess.plist ]
+then
+    $SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /Library/LaunchDaemons
+fi
 $SUDO $MKDIR /opt/local/share/clamav
 $SUDO $CHOWN -R clamav:clamav /opt/local/share/clamav
 $SUDO $MKDIR /opt/Quarantine
