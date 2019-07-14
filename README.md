@@ -16,14 +16,7 @@ Kernel-level, OS-level, and client-level security for macOS. Built to address a 
 ## Anti-Virus features
 * Configures [clamAV](http://www.clamav.net) for macOS with regular on-demand scans and on-access scanning of user `Downloads` 
 and `Desktop` directories.
-* On-Demand scanning is controlled with the launchd daemon
-[org.macports.clamdscan.plist](../../../macOS-clamAV/blob/master/org.macports.clamdscan.plist).
-* On-Access scanning via [fswatch](https://github.com/emcrisostomo/fswatch) is controlled with the Macports daemon script 
-[ClamdScanOnAccess.wrapper](../../../macOS-clamAV/blob/master/ClamdScanOnAccess.wrapper), itself invoked using the launchd 
-daemon [org.macports.ClamdScanOnDemand.plist](../../../macOS-clamAV/blob/master/org.macports.ClamdScanOnDemand.plist). The 
-`Downloads` and `Desktop` directories of all active users are watched by default.
-* See [macOS-clamAV/README.md](../../../macOS-clamAV/blob/master/README.md) for details on how to grant Full Disk Access to 
-the clamav scanning engine for files protected by Mojave TCC.
+* See the [MacPorts](https://www.macports.org/) port `clamav-server` for details, `port notes clamav-server`.
 
 ## Installation
 
@@ -55,8 +48,8 @@ Checking launchd.plist files…
 [✅] /Library/LaunchDaemons/org.macports.Privoxy.plist exists
 [✅] /Library/LaunchDaemons/org.macports.clamd.plist exists
 [✅] /Library/LaunchDaemons/org.macports.freshclam.plist exists
-[✅] /Library/LaunchDaemons/org.macports.clamdscan.plist exists
-[✅] /Library/LaunchDaemons/org.macports.ClamdScanOnAccess.plist exists
+[✅] /Library/LaunchDaemons/org.macports.ClamavScanSchedule.plist exists
+[✅] /Library/LaunchDaemons/org.macports.ClamavScanOnAccess.plist exists
 
 Checking launchd.plist's. These should all be installed with return
 code 0 (2d column of `sudo launchctl list`)…
@@ -68,7 +61,7 @@ code 0 (2d column of `sudo launchctl list`)…
 [✅]	-	0	net.openbsd.pf
 [✅]	-	0	com.github.essandess.adblock2privoxy
 [✅]	35403	0	org.macports.clamd
-[✅]	-	0	org.macports.clamdscan
+[✅]	-	0	org.macports.ClamavScanSchedule
 [✅]	-	0	net.openbsd.pf.brutexpire
 [✅]	-	0	net.emergingthreats.blockips
 [✅]	37069	0	org.macports.Squid
@@ -189,26 +182,9 @@ Update Macports packages regularly. This command with update the Macports databa
 
 `sudo bash -c 'port selfupdate ; port -puN upgrade outdated ; port uninstall inactive'`
 
-### Squid `--enable-http-violations`
+### Warning about Privoxy compression
 
-In addition to editing the configuration and shell scripts in this repo, these configuration options for the proxy chain and 
-desktop browsers may be of interest.
-
-This setting allows squid to forge the `User-Agent` with the `request_header_replace` directive in
-[squid.conf](./squid.conf). In Macports currently, this compile-time configuration must be added to the Macports port file by 
-hand:
-
-```
-sudo port uninstall squid4
-sudo port clean --all squid4
-# add --enable-http-violations to the configure.args line; don't forget the backslash line continuation
-sudo vi `port file squid4`
-sudo port install squid4
-# make sure that the config file /opt/local/etc/squid/squid.conf is correct
-sudo port load squid4
-```
-
-*Warning about Privoxy compression*: Though it's possible to use this approach with Privoxy to `--enable-compression`, 
+Though it's possible to build Privoxy with the `configure` `--enable-compression` option, 
 compressed HTTP traffic within a [VPN tunnel](../../../macos-openvpn-server) exposes your traffic to the
 CRIME/BEAST/[VORACLE](https://openvpn.net/security-advisory/the-voracle-attack-vulnerability/) attacks and is generally not 
 recommended.
