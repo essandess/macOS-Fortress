@@ -74,8 +74,8 @@ LAUNCHD_PLISTS=( \
         org.macports.Privoxy.plist \
         org.macports.clamd.plist \
         org.macports.freshclam.plist \
-        org.macports.clamdscan.plist \
-        org.macports.ClamdScanOnAccess.plist \
+        org.macports.ClamavScanSchedule.plist \
+        org.macports.ClamavScanOnAccess.plist \
     )
 
 for PLIST in "${LAUNCHD_PLISTS[@]}" \
