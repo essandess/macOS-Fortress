@@ -6,5 +6,5 @@
 	url = ../easylist-pac-privoxy.git
 	branch = master
 [submodule "macOS-clamAV"]
-	path = macOS-clamAV
+	path = deprecated/macOS-clamAV
 	url = ../macOS-clamAV.git
