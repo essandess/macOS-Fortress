@@ -358,25 +358,6 @@ $SUDO -E $INSTALL -m 755 ./squid_restart /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./privoxy_restart /usr/local/bin
 $SUDO -E $INSTALL -m 755 ./easylist-pac-privoxy/easylist_pac.py /usr/local/bin
 
-# macOS-clamAV
-$SUDO -E $INSTALL -m 644 -b -B .orig ./macOS-clamAV/clamd.conf /opt/local/etc
-$SUDO -E $INSTALL -m 644 -b -B .orig ./macOS-clamAV/freshclam.conf /opt/local/etc
-if ! [ -f /Library/LaunchDaemons/org.macports.clamdscan.plist ]
-then
-    $SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.clamdscan.plist /Library/LaunchDaemons
-fi
-$SUDO $MKDIR -p /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
-$SUDO -E $INSTALL -m 755 ./macOS-clamAV/ClamdScanOnAccess.wrapper /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
-$SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /opt/local/etc/LaunchDaemons/org.macports.ClamdScanOnAccess
-if ! [ -f /Library/LaunchDaemons/org.macports.ClamdScanOnAccess.plist ]
-then
-    $SUDO -E $INSTALL -m 644 ./macOS-clamAV/org.macports.ClamdScanOnAccess.plist /Library/LaunchDaemons
-fi
-$SUDO $MKDIR /opt/local/share/clamav
-$SUDO $CHOWN -R clamav:clamav /opt/local/share/clamav
-$SUDO $MKDIR /opt/Quarantine
-$SUDO -u clamav /opt/local/bin/freshclam
-
 # launchd daemons
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.plist
 $SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/net.openbsd.pf.brutexpire.plist
@@ -394,12 +375,6 @@ $SUDO -E $LAUNCHCTL start net.dshield.block
 $SUDO -E $LAUNCHCTL start net.hphosts.hosts
 $SUDO -E $LAUNCHCTL start com.github.essandess.easylist-pac
 $SUDO -E $LAUNCHCTL start com.github.essandess.adblock2privoxy
-
-# macOS-clamAV
-$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.clamd.plist
-$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.freshclam.plist
-$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.clamdscan.plist
-$SUDO -E $LAUNCHCTL load -w /Library/LaunchDaemons/org.macports.ClamdScanOnAccess.plist
 
 $LAUNCHCTL load ~/Library/LaunchAgents/org.opensource.flashcookiedelete.plist
 
