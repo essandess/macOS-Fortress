@@ -20,10 +20,45 @@ and `Desktop` directories.
 
 ## Installation
 
+```bash
+sudo port install macos-fortress
+port notes macos-fortress
+sudo port load macos-fortress
 ```
-git clone --recurse-submodules https://github.com/essandess/macOS-Fortress.git
-cd macOS-Fortress
-sudo -E sh -x ./readme-and-install.sh
+
+After initial installation, it is necessary to kickstart these launch daemons, which run on a schedule, and do not run at load time:
+
+```bash
+sudo launchctl kickstart -k system/org.macports.macos-fortress-dshield
+sudo launchctl kickstart -k system/org.macports.macos-fortress-emergingthreats
+sudo launchctl kickstart -k system/org.macports.macos-fortress-hphosts
+sudo launchctl kickstart -k system/org.macports.adblock2privoxy
+sudo launchctl kickstart -k system/org.macports.macos-fortress-easylistpac
+```
+
+The default web server is native macOS Apache, which must be started with the command:
+```bash
+sudo apachectl start
+```
+
+Note that all files in this repo are superceded by the MacPorts port
+[macos-fortress](https://github.com/macports/macports-ports/tree/master/net/macos-fortress), including the
+deprecated installation script [readme-and-install.sh](./readme-and-install.sh).
+
+### Firewall-only installation
+
+```bash
+sudo port install macos-fortress-pf
+port notes macos-fortress-pf
+sudo port load macos-fortress-pf
+```
+
+### Proxy-only installation
+
+```bash
+sudo port install macos-fortress-proxy
+port notes macos-fortress-proxy
+sudo port load macos-fortress-proxy
 ```
 
 ## Check and troubleshoot setup
@@ -208,18 +243,15 @@ To allow this blocking capability:
 * **Firefox**: Set the configuration variable `network.proxy.autoconfig_url.include_path` to be `true` using the Firefox link [about:config](about:config).
 
 ## Installation details
-The install script [readme-and-install.sh](readme-and-install.sh) installs and configures an macOS Firewall and Privatizing
+The MacPorts port
+[macos-fortress](https://github.com/macports/macports-ports/tree/master/net/macos-fortress)
+(`sudo port install macos-fortress`) installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
-* Prompt you to install Apple's Xcode Command Line Tools and [Macports](https://www.macports.org/)
 * Uses Macports to download and install several key utilities and applications (wget gnupg p7zip squid privoxy nmap)
 * Configure macOS's PF native firewall (man pfctl, man pf.conf), squid, and privoxy
-* Turn on macOS's native Apache webserver to serve the Automatic proxy configuration http://localhost/proxy.pac
 * Networking on the local computer can be set up to use this Automatic Proxy Configuration without breaking App Store or other updates (see squid.conf)
 * Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../../../macos-openvpn-server)
 * Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and [EasyList](https://easylist.to) (com.github.essandess.easylist-pac.plist, com.github.essandess.adblock2privoxy.plist)
-* Install On-Demand and On-Access Anti-Virus scanning using [clamAV](http://www.clamav.net); both scheduled full volume scans 
-and on-access scans of all user `Downloads` and `Desktop` directories are performed
-* Installs a user launch daemon that deletes flash cookies not related to Adobe Flash Player settings every half-hour  (http://goo.gl/k4BxuH)
 * After installation the connection between clients and the internet looks this this:
 
 > **Application** :arrow_right: **`proxy.pac`** :arrow_right:port 3128:arrow_right: **Squid** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
