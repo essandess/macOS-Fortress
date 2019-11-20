@@ -62,8 +62,6 @@ This package uses these features:
 This install script installs and configures a macOS Firewall and Privatizing
 Proxy, and macOS On-Demand and On-Access Anti-Virus. It will:
 
-	* Prompt you to install Apple's Xcode Command Line Tools and
-	  Macports <https://www.macports.org/> Uses Macports to
 	* Download and install several key utilities and applications
 	  (wget gnupg2 p7zip squid privoxy nmap)
 	* Configure macOS's PF native firewall (man pfctl, man pf.conf),
@@ -84,9 +82,6 @@ Proxy, and macOS On-Demand and On-Access Anti-Virus. It will:
         * On-Demand and On-Access Anti-Virus using clamAV; both scheduled
           full volume scans and on-access scans of all user Downloads and
           Desktop directories are performed
-	* Installs a user launch daemon that deletes flash cookies not
-          related to Adobe Flash Player settings every half-hour
-          <http://goo.gl/k4BxuH>
 	* After installation the connection between clients and the
 	  internet looks this this:
 
@@ -94,7 +89,7 @@ Proxy, and macOS On-Demand and On-Access Anti-Virus. It will:
 
 Installation:
 
-sudo -E sh -x ./readme-and-install.sh
+sudo port install macos-fortress
 
 Notes:
 
@@ -133,6 +128,36 @@ Security:
 	  configure the router to forward ports 3128 or 8118 in case
 	  you ever change this or you will be running an open web proxy.
 HELPSTRING
+
+$CAT <<MACPORTS_MIGRATION
+This install script is superceded by the MacPorts port macos-fortress.
+Please run:
+
+sudo port install macos-fortress
+sudo port load macos-fortress
+
+After the initial installation, please kickstart these launch daemons:
+
+sudo launchctl kickstart -k system/org.macports.macos-fortress-dshield
+sudo launchctl kickstart -k system/org.macports.macos-fortress-emergingthreats
+sudo launchctl kickstart -k system/org.macports.macos-fortress-hphosts
+sudo launchctl kickstart -k system/org.macports.adblock2privoxy
+sudo launchctl kickstart -k system/org.macports.macos-fortress-easylistpac
+
+If using the native macOS APache webserver, run:
+
+sudo apachectl start
+
+Finally, check the service status and/or the number of Firewall attacks
+by running:
+
+sudo macosfortress_setup_check.sh
+sudo pf_attacks.sh
+MACPORTS_MIGRATION
+exit 1
+
+
+# pre-MacPorts install script
 
 $ECHO "Installing..."
 
