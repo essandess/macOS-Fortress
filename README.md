@@ -157,11 +157,19 @@ Checking proxy status…
 ## Disabling
 
 ```
-sudo sh -x ./disable.sh
+sudo port unload macos-fortress
 ```
 
-The disable/uninstall script [disable.sh](disable.sh) will unload all launch daemons, disable the pf firewall, and list all 
-installed files **without** removing them.
+or
+
+```
+sudo port uninstall macos-fortress
+```
+
+This repo is superceded by the MacPorts port
+[macos-fortress](https://github.com/macports/macports-ports/tree/master/net/macos-fortress), including the
+deprecated disable/uninstall script [disable.sh](./disable.sh), which was originally used to unload all launch daemons, 
+disable the pf firewall, and list all installed files **without** removing them.
 
 ## Configuration modifications
 
