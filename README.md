@@ -10,8 +10,9 @@ Kernel-level, OS-level, and client-level security for macOS. Built to address a 
 * Adaptive firewall to brute force attacks
 * IP blocks updated about twice a day from emergingthreats.net (IP blocks, compromised hosts, Malvertisers) and [dshield.org](https://secure.dshield.org)’s top-20
 * Host blocks updated about twice a day from [hphosts.net](https://www.hosts-file.net)
-* [EasyList](https://easylist.to/index.html) Tracker and Adblock Rules to Proxy Auto Configuration (PAC) [proxy.pac](https://raw.githubusercontent.com/essandess/easylist-pac-privoxy/master/proxy.pac) file and [Privoxy](http://www.privoxy.org) Actions and Filters
-* Uses [easylist-pac-privoxy](../../../easylist-pac-privoxy) and [adblock2privoxy](../../../adblock2privoxy) to easily incorporate multiple blocking rulesets into both PAC and Privoxy formats, including [easyprivacy.txt](https://easylist.to/easylist/easyprivacy.txt), [easylist.txt](https://easylist.to/easylist/easylist.txt), [fanboy-annoyance.txt](https://easylist.to/easylist/fanboy-annoyance.txt), [fanboy-social.txt](https://easylist.to/easylist/fanboy-social.txt), [antiadblockfilters.txt](https://easylist-downloads.adblockplus.org/antiadblockfilters.txt), [malwaredomains_full.txt](https://easylist-downloads.adblockplus.org/malwaredomains_full.txt), and the anti-spamware list [adblock-list.txt](https://raw.githubusercontent.com/Dawsey21/Lists/master/adblock-list.txt).
+* HTTPS Inspection using [Privoxy](http://www.privoxy.org)
+* [EasyList](https://easylist.to/index.html) Tracker and Adblock Rules for [Privoxy](http://www.privoxy.org) with [adblock2privoxy](../../../adblock2privoxy)
+* Incorporates multiple blocking rulesets into both Privoxy and PAC formats, including [easyprivacy.txt](https://easylist.to/easylist/easyprivacy.txt), [easylist.txt](https://easylist.to/easylist/easylist.txt), [fanboy-annoyance.txt](https://easylist.to/easylist/fanboy-annoyance.txt), [fanboy-social.txt](https://easylist.to/easylist/fanboy-social.txt), [antiadblockfilters.txt](https://easylist-downloads.adblockplus.org/antiadblockfilters.txt), [malwaredomains_full.txt](https://easylist-downloads.adblockplus.org/malwaredomains_full.txt), and the anti-spamware list [adblock-list.txt](https://raw.githubusercontent.com/Dawsey21/Lists/master/adblock-list.txt).
 
 ## Anti-Virus features
 * Configures [clamAV](http://www.clamav.net) for macOS with regular on-demand scans and on-access scanning of user `Downloads` 
@@ -79,7 +80,6 @@ Checking launchd.plist files…
 [✅] /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.plist exists
 [✅] /Library/LaunchDaemons/com.github.essandess.adblock2privoxy.nginx.plist exists
 [✅] /Library/LaunchDaemons/org.squid-cache.squid-rotate.plist exists
-[✅] /Library/LaunchDaemons/org.macports.Squid.plist exists
 [✅] /Library/LaunchDaemons/org.macports.Privoxy.plist exists
 [✅] /Library/LaunchDaemons/org.macports.clamd.plist exists
 [✅] /Library/LaunchDaemons/org.macports.freshclam.plist exists
@@ -90,7 +90,6 @@ Checking launchd.plist's. These should all be installed with return
 code 0 (2d column of `sudo launchctl list`)…
 [✅]	-	0	com.github.essandess.easylist-pac
 [✅]	-	0	net.dshield.block
-[✅]	-	0	org.squid-cache.squid-rotate
 [✅]	91695	0	org.macports.ClamdScanOnAccess
 [✅]	-	0	org.macports.freshclam
 [✅]	-	0	net.openbsd.pf
@@ -99,7 +98,6 @@ code 0 (2d column of `sudo launchctl list`)…
 [✅]	-	0	org.macports.ClamavScanSchedule
 [✅]	-	0	net.openbsd.pf.brutexpire
 [✅]	-	0	net.emergingthreats.blockips
-[✅]	37069	0	org.macports.Squid
 [✅]	36183	0	org.macports.Privoxy
 [✅]	5578	0	com.github.essandess.adblock2privoxy.nginx
 [✅]	-	0	net.hphosts.hosts
@@ -138,13 +136,10 @@ Checking proxy PAC and proxy chain files…
 [✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.filter exists
 [✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.system.action exists
 [✅] /usr/local/etc/adblock2privoxy/privoxy/ab2p.system.filter exists
-[✅] /opt/local/etc/squid/squid.conf exists
-[✅] /opt/local/var/squid/logs/cache.log exists
 [✅] /opt/local/etc/privoxy/config exists
 [✅] /opt/local/var/log/privoxy/logfile exists
 
 Checking proxy status…
-[✅] Squid is running properly
 [✅] Privoxy is running properly
 [✅] Privoxy config http://p.p/ via http://localhost:3128 is running properly
 [✅] nginx is running properly
@@ -196,27 +191,18 @@ variables. See `/etc/services`.
 blocked IPs. E.g., the adaptive table `<bruteforce>` is shown using the command:
 > `sudo pfctl -t bruteforce -Ts`
 
-### Proxy chain
+### Proxy
 
-There are four components to the proxy chain: a Proxy AutocConfiguration (PAC) file
-[proxy.pac](../../../easylist-pac-privoxy/proxy.pac), a caching `squid` proxy, a non-caching `privoxy` proxy, and an auxiliary  
-`nginx` webserver. The PAC file [proxy.pac](../../../easylist-pac-privoxy/proxy.pac) proxies unblocked web requests to squid 
-on port 3128, and blocked requests to a static nginx page on port 8119. PAC file blocking rules are derived from Easylist 
-rules. The squid proxy is configured in [squid.conf](./squid.conf) to use privoxy as a parent proxy on port 8118. Privoxy is 
-configured in [config](./config) to sent web requests to the internet, and use the auxiliary nginx webserver for CSS-based 
-element hiding on port 8119. Privoxy `.action` and `.filter` files, and nginx `.css` files are created from Easylist rules 
+Privoxy on port 8118 is configured in [config](./config) to sent web requests to the internet, wih HTTPS inspection configured for
+blocking content within TLS encrypted tunnels—the great majorityof we content. An auxiliary nginx webserver for CSS-based 
+element hiding is configured on port 8119. Privoxy `.action` and `.filter` files, and nginx `.css` files are created from Easylist rules 
 using the repo [adblock2privoxy](../../../adblock2privoxy).
-
-Each of these proxy configurations will work, with [varying](../../../easylist-pac-privoxy#purpose) blocking capabilities:
-* http://localhost/proxy.pac (PAC file, squid, privoxy, nginx element hiding)
-* http://localhost:3128 (squid, privoxy, nginx element hiding)
-* http://localhost:8118 (privoxy, nginx element hiding)
 
 Browsing to the privoxy configuration page http://p.p/ through any of these proxy configurations is a check on whether the 
 proxy is running and configured correctly.
 
-To provide these services on a firewalled LAN, edit the squid, privoxy, and nginx configuration files
-[squid.conf](./squid.conf), [config](./config), and [nginx.conf](../../../adblock2privoxy//nginx.conf) so that they're 
+To provide these services on a firewalled LAN, edit the privoxy and nginx configuration files
+[config](./config), and [nginx.conf](../../../adblock2privoxy//nginx.conf) so that they're 
 available for devices on the LAN, or connecting from a [VPN tunnel](../../../macos-openvpn-server/).
 
 ### Macports updates
@@ -232,37 +218,19 @@ compressed HTTP traffic within a [VPN tunnel](../../../macos-openvpn-server) exp
 CRIME/BEAST/[VORACLE](https://openvpn.net/security-advisory/the-voracle-attack-vulnerability/) attacks and is generally not 
 recommended.
 
-### Browser Path stripping/inclusion in `FindProxyForURL`
-
-Many Easylist rules use URL path information to determine of the request should be blocked or not. Becasue the full URL with 
-its path is necessarily visible to the browser, this information can be passed to the Proxy Autoconfig file, even if the URL 
-uses HTTPS, which is an advantage of using a PAC file for filtering.
-
-However, this behavior presents a security vulnerability if the OS is configured to use a malicious PAC file. This issue can 
-affect any browser, including [Chrome](https://bugs.chromium.org/p/chromium/issues/detail?id=593759) and
-[Safari](https://blog.checkpoint.com/2017/04/27/osx-malware-catching-wants-read-https-traffic/).
-
-Recent versions of Chrome and Firefox are configured to only send the domain name to the `FindProxyForURL` function, which 
-closes this potential security vulnerability, but also prevents blocks based on URL path information.
-
-To allow this blocking capability:
-* **Chrome**: Set the policy `PacHttpsUrlStrippingEnabled` to be `false`. In macOS:
-> `defaults write com.google.Chrome PacHttpsUrlStrippingEnabled -bool false`
-* **Firefox**: Set the configuration variable `network.proxy.autoconfig_url.include_path` to be `true` using the Firefox link [about:config](about:config).
-
 ## Installation details
 The MacPorts port
 [macos-fortress](https://github.com/macports/macports-ports/tree/master/net/macos-fortress)
 (`sudo port install macos-fortress`) installs and configures an macOS Firewall and Privatizing
 Proxy. It will:
 * Uses Macports to download and install several key utilities and applications (wget gnupg p7zip squid privoxy nmap)
-* Configure macOS's PF native firewall (man pfctl, man pf.conf), squid, and privoxy
-* Networking on the local computer can be set up to use this Automatic Proxy Configuration without breaking App Store or other updates (see squid.conf)
+* Configure macOS's PF native firewall (man pfctl, man pf.conf), and privoxy
+* Networking on the local computer can be set up to use this Automatic Proxy Configuration without breaking App Store or other updates (see Privoxy config)
 * Uncomment the nat directive in pf.conf if you wish to set up an [OpenVPN server](../../../macos-openvpn-server)
-* Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist), and [EasyList](https://easylist.to) (com.github.essandess.easylist-pac.plist, com.github.essandess.adblock2privoxy.plist)
+* Install and launch daemons that download and regularly update open source IP and host blacklists. The sources are  emergingthreats.net (net.emergingthreats.blockips.plist), dshield.org (net.dshield.block.plist), hosts-file.net (net.hphosts.hosts.plist)
 * After installation the connection between clients and the internet looks this this:
 
-> **Application** :arrow_right: **`proxy.pac`** :arrow_right:port 3128:arrow_right: **Squid** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
+> **Application** :arrow_right: **`proxy.pac`** :arrow_right:port 8118:arrow_right: **Privoxy**  :arrow_right: **Internet**
 
 An auxilliary nginx-based webserver (nominally on `localhost:8119`) is used for both a `proxy.pac` ad and tracker blackhole and for CSS element blocking rules with the Privoxy configuration generated by [adblock2privoxy](../../../adblock2privoxy).
 
@@ -305,4 +273,4 @@ snort+BASE Overview | snort+BASE Events
 ## Security
 
 * These services are intended to be run on a secure LAN behind a router firewall.
-* The default proxy configuration will only accept connections made from the local computer (localhost). If you change this to accept connections from any client on your LAN, do not configure the router to forward ports 3128 or 8118, or you will be running an open web proxy.
+* The default proxy configuration will only accept connections made from the local computer (localhost). If you change this to accept connections from any client on your LAN, do not configure the router to forward ports 8118, or you will be running an open web proxy.
